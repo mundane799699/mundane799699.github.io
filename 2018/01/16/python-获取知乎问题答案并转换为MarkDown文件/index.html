@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.jpg?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.jpg?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, mundane" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="首先说明, 这个代码不是原创的, 是参考崔老师博客上的文章写的, 代码基本都是照搬的. 原链在这里https://cuiqingcai.com/4607.html不过原项目使用python2写的, 因为我不会python2, 自己修改成了python3 观察页面请求, 寻找规律">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python-获取知乎问题答案并转换为MarkDown文件">
+<meta property="og:url" content="http://yoursite.com/2018/01/16/python-获取知乎问题答案并转换为MarkDown文件/index.html">
+<meta property="og:site_name" content="mundane的幻想空间">
+<meta property="og:description" content="首先说明, 这个代码不是原创的, 是参考崔老师博客上的文章写的, 代码基本都是照搬的. 原链在这里https://cuiqingcai.com/4607.html不过原项目使用python2写的, 因为我不会python2, 自己修改成了python3 观察页面请求, 寻找规律">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://wx3.sinaimg.cn/large/96a29af5gy1fnia3f3s0zj21kw0to4qp.jpg">
+<meta property="og:image" content="http://wx2.sinaimg.cn/large/96a29af5gy1fniajklsv6j217u100n8r.jpg">
+<meta property="og:image" content="http://wx4.sinaimg.cn/large/96a29af5gy1fniaqdb2jej21kw1374ky.jpg">
+<meta property="og:image" content="http://wx3.sinaimg.cn/large/96a29af5gy1fnicn0ew8dj21kw0zp4qp.jpg">
+<meta property="og:image" content="http://wx3.sinaimg.cn/large/96a29af5gy1fnicx17ug7j21kw0zkkjl.jpg">
+<meta property="og:updated_time" content="2018-01-16T05:38:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python-获取知乎问题答案并转换为MarkDown文件">
+<meta name="twitter:description" content="首先说明, 这个代码不是原创的, 是参考崔老师博客上的文章写的, 代码基本都是照搬的. 原链在这里https://cuiqingcai.com/4607.html不过原项目使用python2写的, 因为我不会python2, 自己修改成了python3 观察页面请求, 寻找规律">
+<meta name="twitter:image" content="http://wx3.sinaimg.cn/large/96a29af5gy1fnia3f3s0zj21kw0to4qp.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/16/python-获取知乎问题答案并转换为MarkDown文件/"/>
+
+
+
+
+
+  <title>python-获取知乎问题答案并转换为MarkDown文件 | mundane的幻想空间</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mundane的幻想空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生如逆旅, 一苇以航</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/16/python-获取知乎问题答案并转换为MarkDown文件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mundane">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mundane的幻想空间">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python-获取知乎问题答案并转换为MarkDown文件</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-16T13:28:46+08:00">
+                2018-01-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>首先说明, 这个代码不是原创的, 是参考崔老师博客上的文章写的, 代码基本都是照搬的. 原链在这里<a href="https://cuiqingcai.com/4607.html" target="_blank" rel="noopener">https://cuiqingcai.com/4607.html</a><br>不过原项目使用python2写的, 因为我不会python2, 自己修改成了python3</p>
+<h2 id="观察页面请求-寻找规律"><a href="#观察页面请求-寻找规律" class="headerlink" title="观察页面请求, 寻找规律"></a>观察页面请求, 寻找规律</h2><a id="more"></a>
+<p>打开某个知乎问题的链接, 比如这个<a href="https://www.zhihu.com/question/37400041" target="_blank" rel="noopener">知乎-男生 25 岁了，应该明白哪些道理？</a><br>然后打开开发者工具, 观察到页面中的文本数据基本上来自这个api<br>    <a href="https://www.zhihu.com/api/v4/questions/37400041/answers?include=data%5B*%5D.is_normal%2Cadmin_closed_comment%2Creward_info%2Cis_collapsed%2Cannotation_action%2Cannotation_detail%2Ccollapse_reason%2Cis_sticky%2Ccollapsed_by%2Csuggest_edit%2Ccomment_count%2Ccan_comment%2Ccontent%2Ceditable_content%2Cvoteup_count%2Creshipment_settings%2Ccomment_permission%2Ccreated_time%2Cupdated_time%2Creview_info%2Crelevant_info%2Cquestion%2Cexcerpt%2Crelationship.is_authorized%2Cis_author%2Cvoting%2Cis_thanked%2Cis_nothelp%2Cupvoted_followees%3Bdata%5B*%5D.mark_infos%5B*%5D.url%3Bdata%5B*%5D.author.follower_count%2Cbadge%5B%3F(type%3Dbest_answerer)%5D.topics&amp;offset=3&amp;limit=20&amp;sort_by=default" target="_blank" rel="noopener">https://www.zhihu.com/api/v4/questions/37400041/answers?include=data%5B*%5D.is_normal%2Cadmin_closed_comment%2Creward_info%2Cis_collapsed%2Cannotation_action%2Cannotation_detail%2Ccollapse_reason%2Cis_sticky%2Ccollapsed_by%2Csuggest_edit%2Ccomment_count%2Ccan_comment%2Ccontent%2Ceditable_content%2Cvoteup_count%2Creshipment_settings%2Ccomment_permission%2Ccreated_time%2Cupdated_time%2Creview_info%2Crelevant_info%2Cquestion%2Cexcerpt%2Crelationship.is_authorized%2Cis_author%2Cvoting%2Cis_thanked%2Cis_nothelp%2Cupvoted_followees%3Bdata%5B*%5D.mark_infos%5B*%5D.url%3Bdata%5B*%5D.author.follower_count%2Cbadge%5B%3F(type%3Dbest_answerer)%5D.topics&amp;offset=3&amp;limit=20&amp;sort_by=default</a><br><img src="http://wx3.sinaimg.cn/large/96a29af5gy1fnia3f3s0zj21kw0to4qp.jpg" alt=""><br>但是在原项目的中的代码中我发现, 原作者用了一个更简洁的api<br>    <a href="https://www.zhihu.com/api/v4/questions/37400041/answers?include=data[*].content,voteup_count,created_time&amp;offset=0&amp;limit=20&amp;sort_by=default" target="_blank" rel="noopener">https://www.zhihu.com/api/v4/questions/37400041/answers?include=data[*].content,voteup_count,created_time&amp;offset=0&amp;limit=20&amp;sort_by=default</a><br>我还特意去github问原作者是怎么发现这个接口的, 但是他说他忘了<br><img src="http://wx2.sinaimg.cn/large/96a29af5gy1fniajklsv6j217u100n8r.jpg" alt=""><br>好吧, 那就不管了, 就用这个接口吧</p>
+<h2 id="解析接口数据"><a href="#解析接口数据" class="headerlink" title="解析接口数据"></a>解析接口数据</h2><p>观察接口上面那个接口返回的json数据, 发现结构是这样的<br><img src="http://wx4.sinaimg.cn/large/96a29af5gy1fniaqdb2jej21kw1374ky.jpg" alt=""><br>paging中的previous是前面一个ajax请求接口, next是后面一个ajax请求接口<br>is_end代表是否是最后一个请求<br>is_start代表是否是第一个请求<br>data中一共有20条数据, 均是这个问题下的回答数据<br>所以我们的解析函数可以这样写: 先解析data中的数据, 然后判断是否是最后一条数据, 如果不是, 就递归调用该函数本身继续解析<br>另外可以观察到, 这个接口is_start为true, 确实是第一个请求, 所以按照这个顺序往下解析就能获取所有的数据了, 貌似并不像原文章中说的那样要分为两部分请求<br>代码如下:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">request</span><span class="params">(self, url)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        response = requests.get(url=url, headers=headers)</span><br><span class="line">        <span class="keyword">if</span> response.status_code == <span class="number">200</span>:</span><br><span class="line">            <span class="comment"># 不管是不是最后一条数据, 先进行解析再说</span></span><br><span class="line">            text = response.text</span><br><span class="line">            <span class="comment"># 此处进行进一步解析</span></span><br><span class="line">            <span class="comment"># print('url =', url, 'text =', text)</span></span><br><span class="line">            content = json.loads(text)</span><br><span class="line">            self.parse_content(content)</span><br><span class="line">            <span class="comment"># 如果不是最后一条数据, 继续递归请求并解析</span></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> content.get(<span class="string">'paging'</span>).get(<span class="string">'is_end'</span>):</span><br><span class="line">                next_page_url = content.get(<span class="string">'paging'</span>).get(<span class="string">'next'</span>).replace(<span class="string">'http'</span>, <span class="string">'https'</span>)</span><br><span class="line">                self.request(next_page_url)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line">    <span class="keyword">except</span> RequestException:</span><br><span class="line">        print(<span class="string">'请求网址错误'</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">None</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="将内容转换为markdown"><a href="#将内容转换为markdown" class="headerlink" title="将内容转换为markdown"></a>将内容转换为markdown</h2><p>这一部分的代码我基本是照搬照抄的了, 没有仔细琢磨. 粗略看了一下思路, 主要是使用html2text模块的html2text方法将html格式的文本转换成了text格式, 然后使用正则整理了一下格式, 接着使用正则查找图片链接替换成本地的图片地址<br>代码有点长, 如下:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_content</span><span class="params">(self, content)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">'data'</span> <span class="keyword">in</span> content.keys():</span><br><span class="line">        <span class="keyword">for</span> data <span class="keyword">in</span> content.get(<span class="string">'data'</span>):</span><br><span class="line">            parsed_data = self.parse_data(data)</span><br><span class="line">            self.transform_to_markdown(parsed_data)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_data</span><span class="params">(self, content)</span>:</span></span><br><span class="line">    data = &#123;&#125;</span><br><span class="line">    answer_content = content.get(<span class="string">'content'</span>)</span><br><span class="line">    <span class="comment"># print('content =', content)</span></span><br><span class="line"></span><br><span class="line">    author_name = content.get(<span class="string">'author'</span>).get(<span class="string">'name'</span>)</span><br><span class="line">    print(<span class="string">'author_name ='</span>, author_name)</span><br><span class="line">    answer_id = content.get(<span class="string">'id'</span>)</span><br><span class="line">    question_id = content.get(<span class="string">'question'</span>).get(<span class="string">'id'</span>)</span><br><span class="line">    question_title = content.get(<span class="string">'question'</span>).get(<span class="string">'title'</span>)</span><br><span class="line">    vote_up_count = content.get(<span class="string">'voteup_count'</span>)</span><br><span class="line">    create_time = time.strftime(<span class="string">"%Y-%m-%d %H:%M:%S"</span>, time.localtime(content.get(<span class="string">'created_time'</span>)))</span><br><span class="line"></span><br><span class="line">    content = html_template(answer_content)</span><br><span class="line">    soup = BeautifulSoup(content, <span class="string">'lxml'</span>)</span><br><span class="line">    answer = soup.find(<span class="string">"body"</span>)</span><br><span class="line"></span><br><span class="line">    soup.body.extract()</span><br><span class="line">    soup.head.insert_after(soup.new_tag(<span class="string">"body"</span>, **&#123;<span class="string">'class'</span>: <span class="string">'zhi'</span>&#125;))</span><br><span class="line"></span><br><span class="line">    soup.body.append(answer)</span><br><span class="line"></span><br><span class="line">    img_list = soup.find_all(<span class="string">"img"</span>, class_=<span class="string">"content_image lazy"</span>)</span><br><span class="line">    <span class="keyword">for</span> img <span class="keyword">in</span> img_list:</span><br><span class="line">        img[<span class="string">"src"</span>] = img[<span class="string">"data-actualsrc"</span>]</span><br><span class="line">    img_list = soup.find_all(<span class="string">"img"</span>, class_=<span class="string">"origin_image zh-lightbox-thumb lazy"</span>)</span><br><span class="line">    <span class="keyword">for</span> img <span class="keyword">in</span> img_list:</span><br><span class="line">        img[<span class="string">"src"</span>] = img[<span class="string">"data-actualsrc"</span>]</span><br><span class="line">    noscript_list = soup.find_all(<span class="string">"noscript"</span>)</span><br><span class="line">    <span class="keyword">for</span> noscript <span class="keyword">in</span> noscript_list:</span><br><span class="line">        noscript.extract()</span><br><span class="line"></span><br><span class="line">    data[<span class="string">'content'</span>] = soup</span><br><span class="line">    data[<span class="string">'author_name'</span>] = author_name</span><br><span class="line">    data[<span class="string">'answer_id'</span>] = answer_id</span><br><span class="line">    data[<span class="string">'question_id'</span>] = question_id</span><br><span class="line">    data[<span class="string">'question_title'</span>] = question_title</span><br><span class="line">    data[<span class="string">'vote_up_count'</span>] = vote_up_count</span><br><span class="line">    data[<span class="string">'create_time'</span>] = create_time</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">transform_to_markdown</span><span class="params">(self, data)</span>:</span></span><br><span class="line">    content = data[<span class="string">'content'</span>]</span><br><span class="line">    author_name = data[<span class="string">'author_name'</span>]</span><br><span class="line">    answer_id = data[<span class="string">'answer_id'</span>]</span><br><span class="line">    question_id = data[<span class="string">'question_id'</span>]</span><br><span class="line">    question_title = data[<span class="string">'question_title'</span>]</span><br><span class="line"></span><br><span class="line">    vote_up_count = data[<span class="string">'vote_up_count'</span>]</span><br><span class="line">    create_time = data[<span class="string">'create_time'</span>]</span><br><span class="line"></span><br><span class="line">    file_name = <span class="string">'vote[%d]_%s的回答.md'</span> % (vote_up_count, author_name)</span><br><span class="line"></span><br><span class="line">    folder_name = question_title</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 如果文件夹不存在, 就创建文件夹</span></span><br><span class="line">    question_dir = os.path.join(os.getcwd(), folder_name)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(question_dir):</span><br><span class="line">        os.mkdir(folder_name)</span><br><span class="line"></span><br><span class="line">    answer_path = os.path.join(os.getcwd(), folder_name, file_name)</span><br><span class="line">    <span class="keyword">with</span> open(answer_path, <span class="string">'w+'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="comment"># f.write("-" * 40 + "\n")</span></span><br><span class="line">        origin_url = <span class="string">'https://www.zhihu.com/question/&#123;&#125;/answer/&#123;&#125;'</span>.format(question_id, answer_id)</span><br><span class="line">        <span class="comment"># print('origin_url =', origin_url)</span></span><br><span class="line">        f.write(<span class="string">"### 本答案原始链接: "</span> + origin_url + <span class="string">"\n"</span>)</span><br><span class="line">        f.write(<span class="string">"### question_title: "</span> + question_title + <span class="string">"\n"</span>)</span><br><span class="line">        f.write(<span class="string">"### Author_Name: "</span> + author_name + <span class="string">"\n"</span>)</span><br><span class="line">        f.write(<span class="string">"### Answer_ID: %d"</span> % answer_id + <span class="string">"\n"</span>)</span><br><span class="line">        f.write(<span class="string">"### Question_ID %d: "</span> % question_id + <span class="string">"\n"</span>)</span><br><span class="line">        f.write(<span class="string">"### VoteCount: %s"</span> % vote_up_count + <span class="string">"\n"</span>)</span><br><span class="line">        f.write(<span class="string">"### Create_Time: "</span> + create_time + <span class="string">"\n"</span>)</span><br><span class="line">        f.write(<span class="string">"-"</span> * <span class="number">40</span> + <span class="string">"\n"</span>)</span><br><span class="line"></span><br><span class="line">        text = html2text.html2text(content.decode(<span class="string">'utf-8'</span>))</span><br><span class="line">        <span class="comment"># 标题</span></span><br><span class="line">        r = re.findall(<span class="string">r'\*\*(.*?)\*\*'</span>, text, re.S)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> r:</span><br><span class="line">            <span class="keyword">if</span> i != <span class="string">" "</span>:</span><br><span class="line">                text = text.replace(i, i.strip())</span><br><span class="line"></span><br><span class="line">        r = re.findall(<span class="string">r'_(.*)_'</span>, text)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> r:</span><br><span class="line">            <span class="keyword">if</span> i != <span class="string">" "</span>:</span><br><span class="line">                text = text.replace(i, i.strip())</span><br><span class="line">        text = text.replace(<span class="string">'_ _'</span>, <span class="string">''</span>)</span><br><span class="line">        text = text.replace(<span class="string">'_b.'</span>, <span class="string">'_r.'</span>)</span><br><span class="line">        <span class="comment"># 图片</span></span><br><span class="line">        r = re.findall(<span class="string">r'!\[\]\((?:.*?)\)'</span>, text)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> r:</span><br><span class="line">            text = text.replace(i, i + <span class="string">"\n\n"</span>)</span><br><span class="line">            folder_name = <span class="string">'%s/image'</span> % os.getcwd()</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(folder_name):</span><br><span class="line">                os.mkdir(folder_name)</span><br><span class="line">            img_url = re.findall(<span class="string">'\((.*)\)'</span>, i)[<span class="number">0</span>]</span><br><span class="line">            save_name = img_url.split(<span class="string">'/'</span>)[<span class="number">-1</span>]</span><br><span class="line">            file_path = <span class="string">'%s/%s'</span> % (folder_name, save_name)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                content = self.download_image(img_url)</span><br><span class="line">                <span class="keyword">if</span> content:</span><br><span class="line">                    self.save_image(content, file_path)</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                print(e)</span><br><span class="line">            <span class="keyword">else</span>:  <span class="comment"># if no exception,get here</span></span><br><span class="line">                text = text.replace(img_url, file_path)</span><br><span class="line"></span><br><span class="line">        f.write(text)</span><br><span class="line">        f.close()</span><br></pre></td></tr></table></figure></p>
+<h2 id="成果展示"><a href="#成果展示" class="headerlink" title="成果展示"></a>成果展示</h2><p><img src="http://wx3.sinaimg.cn/large/96a29af5gy1fnicn0ew8dj21kw0zp4qp.jpg" alt=""><br>在finder按照名称逆序排列了一下, 这样就能按照赞同数从多到少浏览这些答案了<br>话说, 赞同数第一的是个什么鬼?明显就是广告, 不能评论, 引用了一句矫情的话语, 赞同数肯定是刷上去的, 我果断给举报了<br><img src="http://wx3.sinaimg.cn/large/96a29af5gy1fnicx17ug7j21kw0zkkjl.jpg" alt=""></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>其实我最初是想有一个好的方式去看我在知乎上关注的问题, 因为有的人写的答案还是很有价值的.但是显然这种markdown的方式并不是很好, 因为查看回答需要一个个的打开markdown文件.而我认为理想的方式是像在知乎的网页上浏览一样, 但并不需要翻页或者什么的, 直接在一个html里面加载好了所有的内容, 就像我以前写的一篇<a href="https://www.jianshu.com/p/67c4c21805c4" target="_blank" rel="noopener">Python-给简书收藏加一个搜索功能</a>一样.<br>现在来看还是将爬取到的数据保存到本地数据库, 然后一次性加载到网页这种方式比较合适.为了实现这一点我还得去学学前端了.另外我还想在退出网页的时候自动保存我上次浏览到的位置, 下次再打开时自动回到那个位置.希望能够实现.<br>另外关于代码方面, 因为将图片下载到本地, 这一过程其实占用了主要的时间, 其实可以用图片的在线地址, 这样会快很多.还有就是本来我想使用像<a href="https://www.jianshu.com/p/2db5d711de88" target="_blank" rel="noopener">街拍美图</a>中那样使用进程池的多进程的, 但是在这里好像应用不上, 因为下一次的请求地址是在本次请求的返回结果里的, 必须先解析了这次请求的内容才能进行下一次的请求.</p>
+<h2 id="github代码地址"><a href="#github代码地址" class="headerlink" title="github代码地址"></a>github代码地址</h2><p><a href="https://github.com/mundane799699/PythonProjects/tree/master/TransformZhihuAnswersToMarkdown" target="_blank" rel="noopener">https://github.com/mundane799699/PythonProjects/tree/master/TransformZhihuAnswersToMarkdown</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/23/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg"
+                alt="mundane" />
+            
+              <p class="site-author-name" itemprop="name">mundane</p>
+              <p class="site-description motion-element" itemprop="description">心之焚焰</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/mundane799699" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/qimingxingzaiqian" target="_blank" title="新浪微博">
+                    
+                      <i class="fa fa-fw fa-weibo"></i>新浪微博</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#观察页面请求-寻找规律"><span class="nav-number">1.</span> <span class="nav-text">观察页面请求, 寻找规律</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解析接口数据"><span class="nav-number">2.</span> <span class="nav-text">解析接口数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将内容转换为markdown"><span class="nav-number">3.</span> <span class="nav-text">将内容转换为markdown</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#成果展示"><span class="nav-number">4.</span> <span class="nav-text">成果展示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#github代码地址"><span class="nav-number">6.</span> <span class="nav-text">github代码地址</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mundane</span>
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
