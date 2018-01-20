@@ -79,16 +79,22 @@
 
 
 
-<meta name="description" content="心之焚焰">
-<meta property="og:type" content="website">
-<meta property="og:title" content="mundane的幻想空间">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="参考资料:Android 异步消息处理机制 让你深入理解 Looper、Handler、Message三者关系Android 进阶14：源码解读 Android 消息机制（ Message MessageQueue Handler LooperAndroid 消息机制——你真的了解Handler？Android 消息处理机制（Looper、Handler、MessageQueue,Message）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android-handler源码解析">
+<meta property="og:url" content="http://yoursite.com/2018/01/20/Android-handler源码解析/index.html">
 <meta property="og:site_name" content="mundane的幻想空间">
-<meta property="og:description" content="心之焚焰">
+<meta property="og:description" content="参考资料:Android 异步消息处理机制 让你深入理解 Looper、Handler、Message三者关系Android 进阶14：源码解读 Android 消息机制（ Message MessageQueue Handler LooperAndroid 消息机制——你真的了解Handler？Android 消息处理机制（Looper、Handler、MessageQueue,Message）">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://wx3.sinaimg.cn/large/96a29af5gy1fnlwz7zi6zj21kw0zxaps.jpg">
+<meta property="og:image" content="http://wx4.sinaimg.cn/large/96a29af5gy1fnlx3iav1mj21kw0owgy1.jpg">
+<meta property="og:image" content="http://wx2.sinaimg.cn/large/96a29af5gy1fnm042zpy5j21kw0y4k61.jpg">
+<meta property="og:image" content="http://wx1.sinaimg.cn/large/96a29af5gy1fnn0mq8omrj21kw0ypng7.jpg">
+<meta property="og:updated_time" content="2018-01-20T09:25:22.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mundane的幻想空间">
-<meta name="twitter:description" content="心之焚焰">
+<meta name="twitter:title" content="Android-handler源码解析">
+<meta name="twitter:description" content="参考资料:Android 异步消息处理机制 让你深入理解 Looper、Handler、Message三者关系Android 进阶14：源码解读 Android 消息机制（ Message MessageQueue Handler LooperAndroid 消息机制——你真的了解Handler？Android 消息处理机制（Looper、Handler、MessageQueue,Message）">
+<meta name="twitter:image" content="http://wx3.sinaimg.cn/large/96a29af5gy1fnlwz7zi6zj21kw0zxaps.jpg">
 
 
 
@@ -118,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/20/Android-handler源码解析/"/>
 
 
 
 
 
-  <title>mundane的幻想空间</title>
+  <title>Android-handler源码解析 | mundane的幻想空间</title>
   
 
 
@@ -143,8 +149,7 @@
     
   
 
-  <div class="container sidebar-position-right 
-  page-home">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -227,9 +232,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -259,9 +264,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/20/Android-handler源码解析/" itemprop="url">Android-handler源码解析</a></h1>
+          <h1 class="post-title" itemprop="name headline">Android-handler源码解析</h1>
         
 
         <div class="post-meta">
@@ -311,9 +314,7 @@
       
 
       
-        
-          
-            <p>参考资料:<br><a href="http://blog.csdn.net/lmj623565791/article/details/38377229" target="_blank" rel="noopener">Android 异步消息处理机制 让你深入理解 Looper、Handler、Message三者关系</a><br><a href="http://blog.csdn.net/u011240877/article/details/72892321" target="_blank" rel="noopener">Android 进阶14：源码解读 Android 消息机制（ Message MessageQueue Handler Looper</a><br><a href="http://blog.csdn.net/qian520ao/article/details/78262289" target="_blank" rel="noopener">Android 消息机制——你真的了解Handler？</a><br><a href="https://www.jianshu.com/p/02962454adf7" target="_blank" rel="noopener">Android 消息处理机制（Looper、Handler、MessageQueue,Message）</a><br>前段时间找工作的过程中, handler消息机制的原理也被问到了好多次. 虽然面试时这个问题基本已经被问烂了, 但是它真的很有意思, 也很能考验一个人深入源码和独立思考的能力.类似的面试题还有主线程怎么给子线程发送消息, 怎么自己实现一个类似handler的东西.这些问题一会儿来讲, 先一步步说清楚handler的原理.</p>
+        <p>参考资料:<br><a href="http://blog.csdn.net/lmj623565791/article/details/38377229" target="_blank" rel="noopener">Android 异步消息处理机制 让你深入理解 Looper、Handler、Message三者关系</a><br><a href="http://blog.csdn.net/u011240877/article/details/72892321" target="_blank" rel="noopener">Android 进阶14：源码解读 Android 消息机制（ Message MessageQueue Handler Looper</a><br><a href="http://blog.csdn.net/qian520ao/article/details/78262289" target="_blank" rel="noopener">Android 消息机制——你真的了解Handler？</a><br><a href="https://www.jianshu.com/p/02962454adf7" target="_blank" rel="noopener">Android 消息处理机制（Looper、Handler、MessageQueue,Message）</a><br>前段时间找工作的过程中, handler消息机制的原理也被问到了好多次. 虽然面试时这个问题基本已经被问烂了, 但是它真的很有意思, 也很能考验一个人深入源码和独立思考的能力.类似的面试题还有主线程怎么给子线程发送消息, 怎么自己实现一个类似handler的东西.这些问题一会儿来讲, 先一步步说清楚handler的原理.</p>
 <h1 id="Looper"><a href="#Looper" class="headerlink" title="Looper"></a>Looper</h1><p>为什么是先分析Looper? 这个我稍候再讲, 先讲Looper的原理.<br>我把Looper这个类从源码里拷贝了出来放在assets目录下, 这样有多个好处, 一是方便我对这个文件添加注释和修改, 二是能够利用ide更便捷的查看源码, 同时不影响demo的编译<br><img src="http://wx3.sinaimg.cn/large/96a29af5gy1fnlwz7zi6zj21kw0zxaps.jpg" alt=""><br>先来看一些Looper这个类的结构<br><img src="http://wx4.sinaimg.cn/large/96a29af5gy1fnlx3iav1mj21kw0owgy1.jpg" alt=""><br>主要是prepare(), looper()和quit()这三个方法<br>先看prepare()方法</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/** Initialize the current thread as a looper.</span></span><br><span class="line"><span class="comment">  * This gives you a chance to create handlers that then reference</span></span><br><span class="line"><span class="comment">  * this looper, before actually starting the loop. Be sure to call</span></span><br><span class="line"><span class="comment">  * &#123;<span class="doctag">@link</span> #loop()&#125; after calling this method, and end it by calling</span></span><br><span class="line"><span class="comment">  * &#123;<span class="doctag">@link</span> #quit()&#125;.</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">prepare</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    prepare(<span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">prepare</span><span class="params">(<span class="keyword">boolean</span> quitAllowed)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (sThreadLocal.get() != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Only one Looper may be created per thread"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    sThreadLocal.set(<span class="keyword">new</span> Looper(quitAllowed));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>注释的意思是初始化这个线程作为一个looper.<br>这给你了一次机会来创建handler.<br>handlers在真正开始循环之前会引用这个looper.<br>确保在调用这个方法之后调用loop()方法.<br>如果要终止它就调用quit()方法.</p>
@@ -357,8 +358,6 @@
 </ol>
 <p>需要注意的是在<code>Looper.loop()</code>的无线循环中, <code>Message msg = queue.next()</code>这一句是”阻塞”在那里的, 如果取到了下一个Message就会往下执行. 这里其实还有好多谜团没有解开, 主要是MessageQueue的<code>next()</code>和<code>enqueueMessage(Message, long)</code>方法</p>
 
-          
-        
       
     </div>
     
@@ -375,265 +374,28 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/16/python-获取知乎问题答案并转换为MarkDown文件/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="mundane">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="mundane的幻想空间">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/16/python-获取知乎问题答案并转换为MarkDown文件/" itemprop="url">python-获取知乎问题答案并转换为MarkDown文件</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-16T13:28:46+08:00">
-                2018-01-16
-              </time>
+              <a href="/2018/01/16/python-获取知乎问题答案并转换为MarkDown文件/" rel="next" title="python-获取知乎问题答案并转换为MarkDown文件">
+                <i class="fa fa-chevron-left"></i> python-获取知乎问题答案并转换为MarkDown文件
+              </a>
             
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>首先说明, 这个代码不是原创的, 是参考崔老师博客上的文章写的, 代码基本都是照搬的. 原链在这里<a href="https://cuiqingcai.com/4607.html" target="_blank" rel="noopener">https://cuiqingcai.com/4607.html</a><br>不过原项目使用python2写的, 因为我不会python2, 自己修改成了python3</p>
-<h2 id="观察页面请求-寻找规律"><a href="#观察页面请求-寻找规律" class="headerlink" title="观察页面请求, 寻找规律"></a>观察页面请求, 寻找规律</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/01/16/python-获取知乎问题答案并转换为MarkDown文件/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
 
-    
+          <span class="post-nav-divider"></span>
 
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/23/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="mundane">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="mundane的幻想空间">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/23/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+          <div class="post-nav-prev post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-23T09:59:55+08:00">
-                2017-12-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -643,10 +405,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -654,6 +417,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -674,8 +441,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -737,6 +513,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Looper"><span class="nav-number">1.</span> <span class="nav-text">Looper</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Handler"><span class="nav-number">2.</span> <span class="nav-text">Handler</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#handler-post-Runnable-r"><span class="nav-number">3.</span> <span class="nav-text">handler.post(Runnable r)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -873,6 +665,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
