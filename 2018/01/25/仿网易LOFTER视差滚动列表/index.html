@@ -79,16 +79,30 @@
 
 
 
-<meta name="description" content="心之焚焰">
-<meta property="og:type" content="website">
-<meta property="og:title" content="mundane的幻想空间">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="最初看到网易LOFTER的首页的视差滚动效果, 觉得很漂亮, 想要模仿一下在写代码之前我先百度了一下, 看有没有人已经完成了类似的这种效果, 一看果然有.然后我就把他们的代码clone了下来, 看了一下, 理解之后自己去实现了一番.所以本篇不是原创, 只记录原理和实现.以下是参考资料:Android视图滚动差—ParallaxScrollImageView高仿寺库View滑动页面ParallaxR">
+<meta property="og:type" content="article">
+<meta property="og:title" content="仿网易LOFTER视差滚动列表">
+<meta property="og:url" content="http://yoursite.com/2018/01/25/仿网易LOFTER视差滚动列表/index.html">
 <meta property="og:site_name" content="mundane的幻想空间">
-<meta property="og:description" content="心之焚焰">
+<meta property="og:description" content="最初看到网易LOFTER的首页的视差滚动效果, 觉得很漂亮, 想要模仿一下在写代码之前我先百度了一下, 看有没有人已经完成了类似的这种效果, 一看果然有.然后我就把他们的代码clone了下来, 看了一下, 理解之后自己去实现了一番.所以本篇不是原创, 只记录原理和实现.以下是参考资料:Android视图滚动差—ParallaxScrollImageView高仿寺库View滑动页面ParallaxR">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://wx2.sinaimg.cn/large/96a29af5ly1fnsnwi86kdg20go0tnnpi.gif">
+<meta property="og:image" content="http://wx2.sinaimg.cn/large/96a29af5ly1fnsovlnmaej215s198wgh.jpg">
+<meta property="og:image" content="http://wx1.sinaimg.cn/large/96a29af5ly1fnsr5arls5j20ib0mo4fr.jpg">
+<meta property="og:image" content="http://wx1.sinaimg.cn/large/96a29af5ly1fnss4ggwwnj20iy0n874g.jpg">
+<meta property="og:image" content="http://wx1.sinaimg.cn/large/96a29af5ly1fnssa6pzzmj20c00es749.jpg">
+<meta property="og:image" content="http://wx3.sinaimg.cn/large/96a29af5ly1fnsteht79xg20go0tnnpg.gif">
+<meta property="og:image" content="http://wx4.sinaimg.cn/large/96a29af5ly1fnstkwncgzj210i0hqgly.jpg">
+<meta property="og:image" content="http://wx4.sinaimg.cn/large/96a29af5ly1fnsu11kz1ug20go0tn4qu.gif">
+<meta property="og:image" content="http://wx3.sinaimg.cn/large/96a29af5ly1fnsuifayf5g208w0fte84.gif">
+<meta property="og:image" content="http://wx2.sinaimg.cn/large/96a29af5ly1fnsupcx09oj20e20he0sr.jpg">
+<meta property="og:image" content="http://wx3.sinaimg.cn/large/96a29af5ly1fnsuxds16xj210y0kc74u.jpg">
+<meta property="og:image" content="http://wx1.sinaimg.cn/large/96a29af5ly1fnsz7j5xxhg20dw0op4qu.gif">
+<meta property="og:updated_time" content="2018-01-25T09:34:39.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mundane的幻想空间">
-<meta name="twitter:description" content="心之焚焰">
+<meta name="twitter:title" content="仿网易LOFTER视差滚动列表">
+<meta name="twitter:description" content="最初看到网易LOFTER的首页的视差滚动效果, 觉得很漂亮, 想要模仿一下在写代码之前我先百度了一下, 看有没有人已经完成了类似的这种效果, 一看果然有.然后我就把他们的代码clone了下来, 看了一下, 理解之后自己去实现了一番.所以本篇不是原创, 只记录原理和实现.以下是参考资料:Android视图滚动差—ParallaxScrollImageView高仿寺库View滑动页面ParallaxR">
+<meta name="twitter:image" content="http://wx2.sinaimg.cn/large/96a29af5ly1fnsnwi86kdg20go0tnnpi.gif">
 
 
 
@@ -118,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/25/仿网易LOFTER视差滚动列表/"/>
 
 
 
 
 
-  <title>mundane的幻想空间</title>
+  <title>仿网易LOFTER视差滚动列表 | mundane的幻想空间</title>
   
 
 
@@ -143,8 +157,7 @@
     
   
 
-  <div class="container sidebar-position-right 
-  page-home">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -247,9 +260,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -279,9 +292,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/25/仿网易LOFTER视差滚动列表/" itemprop="url">仿网易LOFTER视差滚动列表</a></h1>
+          <h1 class="post-title" itemprop="name headline">仿网易LOFTER视差滚动列表</h1>
         
 
         <div class="post-meta">
@@ -331,9 +342,7 @@
       
 
       
-        
-          
-            <p>最初看到网易LOFTER的首页的视差滚动效果, 觉得很漂亮, 想要模仿一下<br><img src="http://wx2.sinaimg.cn/large/96a29af5ly1fnsnwi86kdg20go0tnnpi.gif" width="50%"><br>在写代码之前我先百度了一下, 看有没有人已经完成了类似的这种效果, 一看果然有.然后我就把他们的代码clone了下来, 看了一下, 理解之后自己去实现了一番.所以本篇不是原创, 只记录原理和实现.以下是参考资料:<br><a href="https://www.jianshu.com/p/165da0916157" target="_blank" rel="noopener">Android视图滚动差—ParallaxScrollImageView</a><br><a href="https://github.com/daimaXZ/sicooDemo" target="_blank" rel="noopener">高仿寺库View滑动页面</a><br><a href="https://github.com/yayaa/ParallaxRecyclerView" target="_blank" rel="noopener">ParallaxRecyclerView</a></p>
+        <p>最初看到网易LOFTER的首页的视差滚动效果, 觉得很漂亮, 想要模仿一下<br><img src="http://wx2.sinaimg.cn/large/96a29af5ly1fnsnwi86kdg20go0tnnpi.gif" width="50%"><br>在写代码之前我先百度了一下, 看有没有人已经完成了类似的这种效果, 一看果然有.然后我就把他们的代码clone了下来, 看了一下, 理解之后自己去实现了一番.所以本篇不是原创, 只记录原理和实现.以下是参考资料:<br><a href="https://www.jianshu.com/p/165da0916157" target="_blank" rel="noopener">Android视图滚动差—ParallaxScrollImageView</a><br><a href="https://github.com/daimaXZ/sicooDemo" target="_blank" rel="noopener">高仿寺库View滑动页面</a><br><a href="https://github.com/yayaa/ParallaxRecyclerView" target="_blank" rel="noopener">ParallaxRecyclerView</a></p>
 <h1 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h1><p>首先需要写一个图片列表, 用listView或者recyclerView都可以.然后监听列表的滚动, 计算出图片的中心线和recyclerView的中心线之间的距离, 用这个距离乘以一个比例(这个比例自己定义, 效果合适即可)得到一个偏移量, 然后使用matrix给图片内容加上偏移量.<br><img src="http://wx2.sinaimg.cn/large/96a29af5ly1fnsovlnmaej215s198wgh.jpg" alt=""></p>
 <h1 id="设置滚动监听"><a href="#设置滚动监听" class="headerlink" title="设置滚动监听"></a>设置滚动监听</h1><p>首先以recyclerView举例来说, 给它设置滚动监听</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">mRv.addOnScrollListener(<span class="keyword">new</span> RecyclerView.OnScrollListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onScrollStateChanged</span><span class="params">(RecyclerView recyclerView, <span class="keyword">int</span> newState)</span> </span>&#123;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onScrolled</span><span class="params">(RecyclerView recyclerView, <span class="keyword">int</span> dx, <span class="keyword">int</span> dy)</span> </span>&#123;</span><br><span class="line">                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();</span><br><span class="line">                <span class="comment">// 获取第一个可见条目的position</span></span><br><span class="line">                <span class="keyword">int</span> firstVisibleItem = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();</span><br><span class="line">                <span class="comment">// 获取所有可见条目的数量</span></span><br><span class="line">                <span class="keyword">int</span> visibleItemCount = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition() - firstVisibleItem + <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; visibleItemCount; i++) &#123;</span><br><span class="line">                    View childView = recyclerView.getChildAt(i);</span><br><span class="line">                    RecyclerView.ViewHolder viewHolder = recyclerView.getChildViewHolder(childView);</span><br><span class="line">                    <span class="keyword">if</span> (viewHolder <span class="keyword">instanceof</span> ParallaxViewHolder) &#123;</span><br><span class="line">                        ParallaxViewHolder parallaxViewHolder = (ParallaxViewHolder) viewHolder;</span><br><span class="line">                        parallaxViewHolder.animateImage();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
@@ -361,8 +370,6 @@
 <h2 id="最终效果"><a href="#最终效果" class="headerlink" title="最终效果"></a>最终效果</h2><p><img src="http://wx1.sinaimg.cn/large/96a29af5ly1fnsz7j5xxhg20dw0op4qu.gif" alt=""></p>
 <h1 id="github地址"><a href="#github地址" class="headerlink" title="github地址"></a>github地址</h1><p><a href="https://github.com/mundane799699/AndroidProjects/tree/master/ParallaxRecyclerView" target="_blank" rel="noopener">https://github.com/mundane799699/AndroidProjects/tree/master/ParallaxRecyclerView</a></p>
 
-          
-        
       
     </div>
     
@@ -379,455 +386,28 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/20/Android-handler源码解析/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="mundane">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="mundane的幻想空间">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/20/Android-handler源码解析/" itemprop="url">Handler源码解析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-20T17:24:46+08:00">
-                2018-01-20
-              </time>
+              <a href="/2018/01/20/Android-handler源码解析/" rel="next" title="Handler源码解析">
+                <i class="fa fa-chevron-left"></i> Handler源码解析
+              </a>
             
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>参考资料:<br><a href="http://blog.csdn.net/lmj623565791/article/details/38377229" target="_blank" rel="noopener">Android 异步消息处理机制 让你深入理解 Looper、Handler、Message三者关系</a><br><a href="http://blog.csdn.net/u011240877/article/details/72892321" target="_blank" rel="noopener">Android 进阶14：源码解读 Android 消息机制（ Message MessageQueue Handler Looper</a><br><a href="http://blog.csdn.net/qian520ao/article/details/78262289" target="_blank" rel="noopener">Android 消息机制——你真的了解Handler？</a><br><a href="https://www.jianshu.com/p/02962454adf7" target="_blank" rel="noopener">Android 消息处理机制（Looper、Handler、MessageQueue,Message）</a><br>前段时间找工作的过程中, handler消息机制的原理也被问到了好多次. 虽然面试时这个问题基本已经被问烂了, 但是它真的很有意思, 也很能考验一个人深入源码和独立思考的能力.类似的面试题还有主线程怎么给子线程发送消息, 怎么自己实现一个类似handler的东西.这些问题一会儿来讲, 先一步步说清楚handler的原理.<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/01/20/Android-handler源码解析/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
 
-    
+          <span class="post-nav-divider"></span>
 
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/16/python-获取知乎问题答案并转换为MarkDown文件/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="mundane">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="mundane的幻想空间">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/16/python-获取知乎问题答案并转换为MarkDown文件/" itemprop="url">python-获取知乎问题答案并转换为MarkDown文件</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+          <div class="post-nav-prev post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-16T13:28:46+08:00">
-                2018-01-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>首先说明, 这个代码不是原创的, 是参考崔老师博客上的文章写的, 代码基本都是照搬的. 原链在这里<a href="https://cuiqingcai.com/4607.html" target="_blank" rel="noopener">https://cuiqingcai.com/4607.html</a><br>不过原项目使用python2写的, 因为我不会python2, 自己修改成了python3</p>
-<h2 id="观察页面请求-寻找规律"><a href="#观察页面请求-寻找规律" class="headerlink" title="观察页面请求, 寻找规律"></a>观察页面请求, 寻找规律</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/01/16/python-获取知乎问题答案并转换为MarkDown文件/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/23/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="mundane">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="mundane的幻想空间">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/23/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-23T09:59:55+08:00">
-                2017-12-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/life/" itemprop="url" rel="index">
-                    <span itemprop="name">life</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -837,10 +417,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -848,6 +429,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -868,8 +453,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -949,6 +543,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#实现原理"><span class="nav-number">1.</span> <span class="nav-text">实现原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设置滚动监听"><span class="nav-number">2.</span> <span class="nav-text">设置滚动监听</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ParallaxImageView"><span class="nav-number">3.</span> <span class="nav-text">ParallaxImageView</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#设置缩放"><span class="nav-number">3.1.</span> <span class="nav-text">设置缩放</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使图片居中"><span class="nav-number">3.2.</span> <span class="nav-text">使图片居中</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加上偏移量"><span class="nav-number">3.3.</span> <span class="nav-text">加上偏移量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#边界修正"><span class="nav-number">3.4.</span> <span class="nav-text">边界修正</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最终效果"><span class="nav-number">3.5.</span> <span class="nav-text">最终效果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#github地址"><span class="nav-number">4.</span> <span class="nav-text">github地址</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1085,6 +695,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
