@@ -95,7 +95,7 @@
 <meta property="og:description" content="参考资料:老司机来教你单例的正确姿势《Android源码设计模式解析与实战》">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/96a29af5gy1fou7p3a9bmj20su098taw">
-<meta property="og:updated_time" content="2018-02-27T01:59:54.000Z">
+<meta property="og:updated_time" content="2018-02-27T02:05:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式之单例模式">
 <meta name="twitter:description" content="参考资料:老司机来教你单例的正确姿势《Android源码设计模式解析与实战》">
@@ -365,7 +365,7 @@
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>单例模式可以说是应用最广泛的模式了, 面试也经常被问到, 经常会被要求能够手写单例, 所以我今天也来总结一下</p>
 <h1 id="单例模式的定义"><a href="#单例模式的定义" class="headerlink" title="单例模式的定义"></a>单例模式的定义</h1><p>确保某一个类只有一个实例, 并且自定实例化并向整个系统提供这个实例</p>
 <h1 id="单例模式的使用场景"><a href="#单例模式的使用场景" class="headerlink" title="单例模式的使用场景"></a>单例模式的使用场景</h1><p>确保某个类有且只有一个对象的场景, 避免产生多个对象消耗过多的资源, 或者某种类型的对象只应该有且只有一个.例如, 创建一个对象需要消耗的资源过多, 如要访问IO和数据库等资源</p>
-<h1 id="单例的UML类图"><a href="#单例的UML类图" class="headerlink" title="单例的UML类图"></a>单例的UML类图</h1><p><img src="https://ws1.sinaimg.cn/large/96a29af5gy1fou7p3a9bmj20su098taw"><br>插点题外话说一下怎么看UML类图, 例如这里的Singleton矩形框就代表一个类, 第一层显示类的名称, 抽象类用斜体表示; 第二层是类的特性, 通常是字段和属性; 第三层是类的操作, 通常是方法. ‘+’表示public, ‘-‘表示private, ‘#’表示protected, 例如这里的getInstance()方法是public的, 构造方法是private的.<br>与类图有区别的是接口图, 顶端有\&lt;\<interface\>>显示<br>实现单例模式有一下几个关键点:</interface\></p>
+<h1 id="单例的UML类图"><a href="#单例的UML类图" class="headerlink" title="单例的UML类图"></a>单例的UML类图</h1><p><img src="https://ws1.sinaimg.cn/large/96a29af5gy1fou7p3a9bmj20su098taw"><br>插点题外话说一下怎么看UML类图, 例如这里的Singleton矩形框就代表一个类, 第一层显示类的名称, 抽象类用斜体表示; 第二层是类的特性, 通常是字段和属性; 第三层是类的操作, 通常是方法. ‘+’表示public, ‘-‘表示private, ‘#’表示protected, 例如这里的getInstance()方法是public的, 构造方法是private的.<br>与类图有区别的是接口图, 顶端有<code>&lt;&lt;interface&gt;&gt;</code>显示<br>实现单例模式有一下几个关键点:</p>
 <ol>
 <li>构造函数不对外开放, 一般为private, 是的客户端不能通过new的形式手动构造单例类的对象</li>
 <li>通过一个静态方法或者枚举返回单例类对象</li>
@@ -420,7 +420,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+            <a href="/tags/设计模式/" rel="tag"><i class="fa fa-tag"></i> 设计模式</a>
           
         </div>
       
