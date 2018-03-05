@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.jpg?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.jpg?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, mundane" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="&amp;emsp;&amp;emsp;好久没有更新自己的简书博客了，说来真是惭愧，感觉自己太点懒了。话说其实坚持写博客还是很有用的，可以梳理自己的知识，帮助自己加深印象，找工作的时候也算是一点筹码，起码能够说明热爱技术并且真的有涉及过，而不是整天在公司混日子，所以今后我应该会增加博客的更新频率。接下来是正题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android多点触控最佳实践">
+<meta property="og:url" content="http://yoursite.com/2017/09/14/multi-touch-practice/index.html">
+<meta property="og:site_name" content="mundane的幻想空间">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;好久没有更新自己的简书博客了，说来真是惭愧，感觉自己太点懒了。话说其实坚持写博客还是很有用的，可以梳理自己的知识，帮助自己加深印象，找工作的时候也算是一点筹码，起码能够说明热爱技术并且真的有涉及过，而不是整天在公司混日子，所以今后我应该会增加博客的更新频率。接下来是正题。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1626396-ba7bca07eb39004a.gif?imageMogr2/auto-orient/strip">
+<meta property="og:image" content="http://wx2.sinaimg.cn/mw690/96a29af5gy1fjhxoem1leg20go0tn4r4.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/500">
+<meta property="og:image" content="http://wx1.sinaimg.cn/mw690/96a29af5gy1fjhye0ygrwg20f00qo1ld.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/500">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1626396-f7983973a28f8a12.gif?imageMogr2/auto-orient/strip">
+<meta property="og:image" content="http://wx2.sinaimg.cn/mw690/96a29af5gy1fjitoe9om4g20go0tn1l6.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/500">
+<meta property="og:image" content="http://wx4.sinaimg.cn/mw690/96a29af5gy1fjiuvgx0vtg20go0tn1l8.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/500">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1626396-df85268d2ebb46ba.gif?imageMogr2/auto-orient/strip">
+<meta property="og:updated_time" content="2018-03-05T16:06:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android多点触控最佳实践">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;好久没有更新自己的简书博客了，说来真是惭愧，感觉自己太点懒了。话说其实坚持写博客还是很有用的，可以梳理自己的知识，帮助自己加深印象，找工作的时候也算是一点筹码，起码能够说明热爱技术并且真的有涉及过，而不是整天在公司混日子，所以今后我应该会增加博客的更新频率。接下来是正题。">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1626396-ba7bca07eb39004a.gif?imageMogr2/auto-orient/strip">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/14/multi-touch-practice/"/>
+
+
+
+
+
+  <title>Android多点触控最佳实践 | mundane的幻想空间</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mundane的幻想空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生如逆旅, 一苇以航</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/14/multi-touch-practice/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mundane">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mundane的幻想空间">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android多点触控最佳实践</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T23:53:12+08:00">
+                2017-09-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&emsp;&emsp;好久没有更新自己的简书博客了，说来真是惭愧，感觉自己太点懒了。话说其实坚持写博客还是很有用的，可以梳理自己的知识，帮助自己加深印象，找工作的时候也算是一点筹码，起码能够说明热爱技术并且真的有涉及过，而不是整天在公司混日子，所以今后我应该会增加博客的更新频率。接下来是正题。<br><a id="more"></a></p>
+<hr>
+<h2 id="事故现场"><a href="#事故现场" class="headerlink" title="事故现场"></a>事故现场</h2><p>&emsp;&emsp;最近在对公司项目中的控件进行优化改造，其中一个是能够上拉和下拉的弹性ScrollView<br><img src="http://upload-images.jianshu.io/upload_images/1626396-ba7bca07eb39004a.gif?imageMogr2/auto-orient/strip" width="50%"><br>  发现没有，当使用一个手指的时候感觉还不错。但是当我想用两个手指交替不断下拉想要把视图内容往下“扒”的时候就办不到了,因为他在onTouchEvent()方法里只是最简单的实现了下拉的逻辑而没有涉及到多指触控，而我想要的效果是像QQ空间或者微信朋友圈那样的。<br><img src="http://wx2.sinaimg.cn/mw690/96a29af5gy1fjhxoem1leg20go0tn4r4.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/500" width="50%"><br><img src="http://wx1.sinaimg.cn/mw690/96a29af5gy1fjhye0ygrwg20f00qo1ld.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/500" width="50%"></p>
+<hr>
+<h2 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h2><p>  为了将控件改造成能够支持多点触控的，首先我们需要了解Android中关于多点触控的基础知识。这里我推荐先阅读GcsSloop的两篇文章<br><a href="http://www.gcssloop.com/customview/motionevent" target="_blank" rel="noopener">安卓自定义View进阶-MotionEvent详解</a><br><a href="http://www.gcssloop.com/customview/multi-touch" target="_blank" rel="noopener">安卓自定义View进阶-多点触控详解</a><br>  我现在假设你已经看了上面的那两篇文章，下面我来划重点：<br>1.多点触控时必须使用<strong>getActionMasked()</strong>来获取事件类型<br>2.<strong>Pointer：</strong><br>MotionEvent中引入了Pointer的概念，一个pointer就代表一个触摸点，每个pointer都有自己的事件类型，也有自己的横轴坐标值。一个MotionEvent对象中可能会存储多个pointer的相关信息，每个pointer都会有一个自己的id和index。<strong>pointer的id在整个事件流中是不会发生变化的，但是index会发生变化</strong><br>3.<strong>PointerId：</strong><br>每根手指从按下、移动到离开屏幕，每个手指都会拥有一个固定PointerId.PointerId的值，<strong>一般用它来区分是哪根手指</strong><br>4.<strong>PointerIndex：</strong><br>每根手指从按下、移动到离开屏幕，每根手指在每一个事件的Index可能是不固定的,因为受到其它手指的影响<br>5.<strong>PointerId和PointerIndex的变化规律</strong><br>关于变化规律这里，可以看GcsSloop的第二篇文章，这里我不再赘述，只举一个实际的例子：</p>
+<table>
+<thead>
+<tr>
+<th>事件</th>
+<th>PointerId</th>
+<th>PointerIndex</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>依次按下三根手指</td>
+<td>三根手指的id依次为0、1、2</td>
+<td>三根手指的index依次为0、1、2</td>
+</tr>
+<tr>
+<td>抬起第二根手指</td>
+<td>第一根手指的id为0，第三根手指的id为2</td>
+<td>第一根手指的index为0，第三根手指的index变为1</td>
+</tr>
+<tr>
+<td>抬起第一根手指</td>
+<td>第三根手指的id为2</td>
+<td>第三根手指的index变为0</td>
+</tr>
+</tbody>
+</table>
+<p>  可见同一根手指的id是不会变化的，而index是会变化的，但总是以0、1或者0、1、2这样的形式出现，而不可能出现0、2这样间隔了一个的或者1、2这样的没有0索引在内的形式</p>
+<p>6.多点触控相关事件</p>
+<table>
+<thead>
+<tr>
+<th>事件</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ACTION_DOWN</td>
+<td>第一个手指初次接触到屏幕时触发</td>
+</tr>
+<tr>
+<td>ACTION_MOVE</td>
+<td>手指在屏幕上滑动时触发，会多次触发。</td>
+</tr>
+<tr>
+<td>ACTION_UP</td>
+<td>最后一个手指离开屏幕时触发</td>
+</tr>
+<tr>
+<td><strong>ACTION_POINTER_DOWN</strong></td>
+<td>有非主要的手指按下(即按下之前已经有手指在屏幕上)</td>
+</tr>
+<tr>
+<td><strong>ACTION_POINTER_UP</strong></td>
+<td>有非主要的手指抬起(即抬起之后仍然有手指在屏幕上)</td>
+</tr>
+</tbody>
+</table>
+<p>7.多点触控相关的方法：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>getActionMasked()</td>
+<td>与 getAction() 类似，多点触控需要使用这个方法获取事件类型</td>
+</tr>
+<tr>
+<td><strong>getActionIndex()</strong></td>
+<td>获取该事件是哪个指针(手指)产生的</td>
+</tr>
+<tr>
+<td><strong>getPointerId(int pointerIndex)</strong></td>
+<td>获取一个指针(手指)的唯一标识符ID，在手指按下和抬起之间ID始终不变</td>
+</tr>
+<tr>
+<td>getX(int pointerIndex)</td>
+<td>获取某一个指针(手指)的X坐标</td>
+</tr>
+<tr>
+<td>getY(int pointerIndex)</td>
+<td>获取某一个指针(手指)的Y坐标</td>
+</tr>
+<tr>
+<td>findPointerIndex(int pointerId)</td>
+<td>通过PointerId获取到当前状态下PointIndex，之后通过PointIndex获取其他内容</td>
+</tr>
+<tr>
+<td>getPointerCount()</td>
+<td>获取在屏幕上手指的个数</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="如何使用多点触控"><a href="#如何使用多点触控" class="headerlink" title="如何使用多点触控"></a>如何使用多点触控</h2><p>  对于多点触控的处理，一般是这样：<br>记录活动手指的id(mActivePointerId)，通过此id获取move事件的坐标</p>
+<ol>
+<li>在手指按下的时候，记录下activePointerId</li>
+<li>第二根手指按下的时候，更新activePointerId（我们让第二根手指作为活动手指，忽略第一个手指的move）</li>
+<li>当其中一根手指抬起时，如果是第一根手指，那么不做处理，如果是第二根手指抬起，也就是活动手指抬起的话，将活动手指改回第一根<br>我这里还是举一个GcsSloop文章中的例子：<br>如果我们需要一个可以用单指拖动的图片。假如我们不进行多指触控的判断，像下面这样：<br>没有针对多指触控处理版本：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DragViewSingleTouch</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;</span><br><span class="line">	String TAG = <span class="string">"DragViewSingleTouch"</span>;</span><br><span class="line"></span><br><span class="line">	Bitmap mBitmap;         <span class="comment">// 图片</span></span><br><span class="line">	RectF mBitmapRectF;     <span class="comment">// 图片所在区域</span></span><br><span class="line">	Matrix mBitmapMatrix;   <span class="comment">// 控制图片的 matrix</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">boolean</span> canDrag = <span class="keyword">false</span>;</span><br><span class="line">	PointF lastPoint = <span class="keyword">new</span> PointF(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">private</span> Paint mDeafultPaint;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">DragViewSingleTouch</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>(context, <span class="keyword">null</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">DragViewSingleTouch</span><span class="params">(Context context, @Nullable AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(context, attrs);</span><br><span class="line"></span><br><span class="line">		mDeafultPaint = <span class="keyword">new</span> Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 调整图片大小</span></span><br><span class="line">		BitmapFactory.Options options = <span class="keyword">new</span> BitmapFactory.Options();</span><br><span class="line">		options.outWidth = <span class="number">960</span>/<span class="number">2</span>;</span><br><span class="line">		options.outHeight = <span class="number">800</span>/<span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">		mBitmap = BitmapFactory.decodeResource(<span class="keyword">this</span>.getResources(), R.drawable.poly_test, options);</span><br><span class="line">		mBitmapRectF = <span class="keyword">new</span> RectF(<span class="number">0</span>,<span class="number">0</span>,mBitmap.getWidth(), mBitmap.getHeight());</span><br><span class="line">		mBitmapMatrix = <span class="keyword">new</span> Matrix();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">switch</span> (event.getActionMasked()) &#123;</span><br><span class="line">			<span class="keyword">case</span> MotionEvent.ACTION_DOWN:</span><br><span class="line">				<span class="comment">// 判断按下位置是否包含在图片区域内</span></span><br><span class="line">				<span class="keyword">if</span> (mBitmapRectF.contains((<span class="keyword">int</span>)event.getX(), (<span class="keyword">int</span>)event.getY()))&#123;</span><br><span class="line">					canDrag = <span class="keyword">true</span>;</span><br><span class="line">					lastPoint.set(event.getX(), event.getY());</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			<span class="keyword">case</span> MotionEvent.ACTION_UP:</span><br><span class="line">				canDrag = <span class="keyword">false</span>;</span><br><span class="line">			<span class="keyword">case</span> MotionEvent.ACTION_MOVE:</span><br><span class="line">				<span class="keyword">if</span> (canDrag) &#123;</span><br><span class="line">					<span class="comment">// 移动图片</span></span><br><span class="line">					mBitmapMatrix.postTranslate(event.getX() - lastPoint.x, event.getY() - lastPoint.y);</span><br><span class="line">					<span class="comment">// 更新上一次点位置</span></span><br><span class="line">					lastPoint.set(event.getX(), event.getY());</span><br><span class="line"></span><br><span class="line">					<span class="comment">// 更新图片区域</span></span><br><span class="line">					mBitmapRectF = <span class="keyword">new</span> RectF(<span class="number">0</span>, <span class="number">0</span>, mBitmap.getWidth(), mBitmap.getHeight());</span><br><span class="line">					mBitmapMatrix.mapRect(mBitmapRectF);</span><br><span class="line"></span><br><span class="line">					invalidate();</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">		canvas.drawBitmap(mBitmap, mBitmapMatrix, mDeafultPaint);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>  这个版本非常简单，当然了，如果正常使用(只使用一个手指)的话也不会出问题，但是当使用多个手指，且有抬起和按下的时候就可能出问题<br><img src="http://upload-images.jianshu.io/upload_images/1626396-f7983973a28f8a12.gif?imageMogr2/auto-orient/strip" width="50%"><br>  注意在第二个手指按下，第一个手指抬起时，此时原本的第二个手指会被识别为第一个，所以图片会直接跳动到第二个手指位置。原因是event.getX()和event.getY中没有传入pointerIndex的参数， 那么默认追踪的就是pointerIndex = 0的手指，当第二个手指按下，第一个手指抬起的时候，触发了move事件，event.getX()和event.getY()此时是获取第二个手指的数据，而lastPoint.x和lastPoint.y并没有在第二个手指按下的时候进行更新，记录的是第一个手指抬起时候的坐标，和evet.getX()、event.getY()有较大的距离， 所以postTranslate了很大一段距离， 发生了跳动的情况。<br>  为了不出现这种情况，我们可以判断一下 pointId 并且只获取第一个手指的数据，这样就能避免这种情况发生了，如下。<br>针对多指触控处理后版本:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DragViewUpGrade</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;</span><br><span class="line">	String TAG = <span class="string">"DragViewUpGrade"</span>;</span><br><span class="line"></span><br><span class="line">	Bitmap mBitmap;         <span class="comment">// 图片</span></span><br><span class="line">	RectF mBitmapRectF;     <span class="comment">// 图片所在区域</span></span><br><span class="line">	Matrix mBitmapMatrix;   <span class="comment">// 控制图片的 matrix</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">boolean</span> canDrag = <span class="keyword">false</span>;</span><br><span class="line">	PointF lastPoint = <span class="keyword">new</span> PointF(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">DragViewUpGrade</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>(context, <span class="keyword">null</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">DragViewUpGrade</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(context, attrs);</span><br><span class="line"></span><br><span class="line">		mDeafultPaint = <span class="keyword">new</span> Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);</span><br><span class="line"></span><br><span class="line">		BitmapFactory.Options options = <span class="keyword">new</span> BitmapFactory.Options();</span><br><span class="line">		options.outWidth = <span class="number">960</span>/<span class="number">2</span>;</span><br><span class="line">		options.outHeight = <span class="number">800</span>/<span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">		mBitmap = BitmapFactory.decodeResource(<span class="keyword">this</span>.getResources(), R.drawable.poly_test, options);</span><br><span class="line">		mBitmapRectF = <span class="keyword">new</span> RectF(<span class="number">0</span>,<span class="number">0</span>,mBitmap.getWidth(), mBitmap.getHeight());</span><br><span class="line">		mBitmapMatrix = <span class="keyword">new</span> Matrix();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">switch</span> (event.getActionMasked()) &#123;</span><br><span class="line">			<span class="keyword">case</span> MotionEvent.ACTION_DOWN:</span><br><span class="line">			<span class="keyword">case</span> MotionEvent.ACTION_POINTER_DOWN:</span><br><span class="line">				<span class="comment">// ▼ 判断是否是第一个手指 &amp;&amp; 是否包含在图片区域内</span></span><br><span class="line">				<span class="keyword">if</span> (event.getPointerId(event.getActionIndex()) == <span class="number">0</span> &amp;&amp; mBitmapRectF.contains((<span class="keyword">int</span>)event.getX(), (<span class="keyword">int</span>)event.getY()))&#123;</span><br><span class="line">					canDrag = <span class="keyword">true</span>;</span><br><span class="line">					lastPoint.set(event.getX(), event.getY());</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			<span class="keyword">case</span> MotionEvent.ACTION_UP:</span><br><span class="line">			<span class="keyword">case</span> MotionEvent.ACTION_POINTER_UP:</span><br><span class="line">				<span class="comment">// ▼ 判断是否是第一个手指</span></span><br><span class="line">				<span class="keyword">if</span> (event.getPointerId(event.getActionIndex()) == <span class="number">0</span>)&#123;</span><br><span class="line">					canDrag = <span class="keyword">false</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			<span class="keyword">case</span> MotionEvent.ACTION_MOVE:</span><br><span class="line">				<span class="comment">// 如果存在第一个手指，且这个手指的落点在图片区域内</span></span><br><span class="line">				<span class="keyword">if</span> (canDrag) &#123;</span><br><span class="line">					<span class="comment">// ▼ 注意 getX 和 getY</span></span><br><span class="line">					<span class="comment">// 只找第一根手指</span></span><br><span class="line">					<span class="keyword">int</span> index = event.findPointerIndex(<span class="number">0</span>);</span><br><span class="line">					<span class="comment">// Log.i(TAG, "index="+index);</span></span><br><span class="line">					mBitmapMatrix.postTranslate(event.getX(index)-lastPoint.x, event.getY(index)-lastPoint.y);</span><br><span class="line">					lastPoint.set(event.getX(index), event.getY(index));</span><br><span class="line"></span><br><span class="line">					mBitmapRectF = <span class="keyword">new</span> RectF(<span class="number">0</span>,<span class="number">0</span>,mBitmap.getWidth(), mBitmap.getHeight());</span><br><span class="line">					mBitmapMatrix.mapRect(mBitmapRectF);</span><br><span class="line"></span><br><span class="line">					invalidate();</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> Paint mDeafultPaint;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">		canvas.drawBitmap(mBitmap, mBitmapMatrix, mDeafultPaint);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  这个也是GcsSloop的代码，因为这里只追踪第一根手指（pointerId = 0的手指），第二根手指的活动全都无视，所以不会再出现跳动的情况<br><img src="http://wx2.sinaimg.cn/mw690/96a29af5gy1fjitoe9om4g20go0tn1l6.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/500" width="50%"><br>  但是我觉得依旧不够，因为我想要的是当第二根手指放下的时候就可以靠第二根手指来移动图片，而不是无视第二根手指。这是就产生了最终的版本，是我在GcsSloop的代码基础上加以改进的，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DragViewFinal</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;</span><br><span class="line">	String TAG = <span class="string">"DragViewFinal"</span>;</span><br><span class="line"></span><br><span class="line">	Bitmap mBitmap;         <span class="comment">// 图片</span></span><br><span class="line">	RectF mBitmapRectF;     <span class="comment">// 图片所在区域</span></span><br><span class="line">	Matrix mBitmapMatrix;   <span class="comment">// 控制图片的 matrix</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">boolean</span> canDrag = <span class="keyword">false</span>;</span><br><span class="line">	PointF lastPoint = <span class="keyword">new</span> PointF(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">private</span> Paint mDeafultPaint;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">DragViewFinal</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>(context, <span class="keyword">null</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">DragViewFinal</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(context, attrs);</span><br><span class="line"></span><br><span class="line">		mDeafultPaint = <span class="keyword">new</span> Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 调整图片大小</span></span><br><span class="line">		BitmapFactory.Options options = <span class="keyword">new</span> BitmapFactory.Options();</span><br><span class="line">		options.outWidth = <span class="number">960</span> / <span class="number">2</span>;</span><br><span class="line">		options.outHeight = <span class="number">800</span> / <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">		mBitmap = BitmapFactory.decodeResource(<span class="keyword">this</span>.getResources(), R.drawable.poly_test, options);</span><br><span class="line">		mBitmapRectF = <span class="keyword">new</span> RectF(<span class="number">0</span>, <span class="number">0</span>, mBitmap.getWidth(), mBitmap.getHeight());</span><br><span class="line">		mBitmapMatrix = <span class="keyword">new</span> Matrix();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> mActivePointerId;</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * A null/invalid pointer ID.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> INVALID_POINTER = -<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 记录活动手指的id（activePointerId），通过此ID获取move事件的坐标。</span></span><br><span class="line">	<span class="comment">// 在手指按下的时候，记录下activePointerId</span></span><br><span class="line">	<span class="comment">// 第二根手指按下的时候，更新activePointerId。（我们让第二根手指作为活动手指，忽略第一个手指的move）</span></span><br><span class="line">	<span class="comment">// 当其中一根手指抬起时，如果是第一根手指，那么不做处理，如果是第二根手指抬起，也就是活动手指抬起的话，将活动手指改回第一根。</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">final</span> <span class="keyword">int</span> action = event.getActionMasked();</span><br><span class="line">		<span class="keyword">final</span> <span class="keyword">int</span> actionIndex = event.getActionIndex();</span><br><span class="line">		<span class="keyword">switch</span> (action) &#123;</span><br><span class="line">			<span class="keyword">case</span> MotionEvent.ACTION_DOWN:</span><br><span class="line">				<span class="comment">// 判断按下位置是否包含在图片区域内</span></span><br><span class="line">				<span class="keyword">if</span> (mBitmapRectF.contains((<span class="keyword">int</span>) event.getX(), (<span class="keyword">int</span>) event.getY())) &#123;</span><br><span class="line">					mActivePointerId = event.getPointerId(<span class="number">0</span>);</span><br><span class="line">					Log.d(<span class="string">"ACTION_DOWN"</span>, <span class="string">"mActivePointerId = "</span> + mActivePointerId);</span><br><span class="line">					canDrag = <span class="keyword">true</span>;</span><br><span class="line">					lastPoint.set(event.getX(<span class="number">0</span>), event.getY(<span class="number">0</span>));</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			<span class="keyword">case</span> MotionEvent.ACTION_POINTER_DOWN:</span><br><span class="line">				<span class="comment">// 将新落下来那根手指作为活动手指</span></span><br><span class="line">				mActivePointerId = event.getPointerId(actionIndex);</span><br><span class="line">				lastPoint.set(event.getX(actionIndex), event.getY(actionIndex));</span><br><span class="line">				Log.d(<span class="string">"ACTION_POINTER_DOWN"</span>, <span class="string">"mActivePointerId = "</span> + mActivePointerId);</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			<span class="keyword">case</span> MotionEvent.ACTION_POINTER_UP:</span><br><span class="line">				<span class="keyword">if</span> (mActivePointerId == event.getPointerId(actionIndex)) &#123; <span class="comment">// 如果松开的是活动手指, 让还停留在屏幕上的最后一根手指作为活动手指</span></span><br><span class="line">					<span class="comment">// This was our active pointer going up. Choose a new</span></span><br><span class="line">					<span class="comment">// active pointer and adjust accordingly.</span></span><br><span class="line">					<span class="comment">// pointerIndex都是像0, 1, 2这样连续的</span></span><br><span class="line">					<span class="keyword">final</span> <span class="keyword">int</span> newPointerIndex = actionIndex == <span class="number">0</span> ? <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line">					mActivePointerId = event.getPointerId(newPointerIndex);</span><br><span class="line">					lastPoint.set(event.getX(newPointerIndex), event.getY(newPointerIndex));</span><br><span class="line">					Log.d(<span class="string">"ACTION_POINTER_UP"</span>, <span class="string">"松开的是活动手指"</span>);</span><br><span class="line">				&#125;</span><br><span class="line">				Log.d(<span class="string">"ACTION_POINTER_UP"</span>, <span class="string">"mActivePointerId = "</span> + mActivePointerId);</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			<span class="keyword">case</span> MotionEvent.ACTION_UP: <span class="comment">// 代表用户的最后一个手指离开了屏幕</span></span><br><span class="line">				mActivePointerId = INVALID_POINTER;</span><br><span class="line">				canDrag = <span class="keyword">false</span>;</span><br><span class="line">				Log.d(<span class="string">"ACTION_UP"</span>, <span class="string">"mActivePointerId = "</span> + mActivePointerId);</span><br><span class="line">			<span class="keyword">case</span> MotionEvent.ACTION_MOVE:</span><br><span class="line">				<span class="keyword">if</span> (mActivePointerId == INVALID_POINTER) &#123;</span><br><span class="line">					Log.e(<span class="string">"ACTION_MOVE"</span>, <span class="string">"Got ACTION_MOVE event but don't have an active pointer id."</span>);</span><br><span class="line">					<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (canDrag) &#123;</span><br><span class="line">					<span class="keyword">final</span> <span class="keyword">int</span> pointerIndex = event.findPointerIndex(mActivePointerId);</span><br><span class="line">					mBitmapMatrix.postTranslate(event.getX(pointerIndex) - lastPoint.x, event.getY(pointerIndex) - lastPoint.y);</span><br><span class="line">					<span class="comment">// 更新上一次点位置</span></span><br><span class="line">					lastPoint.set(event.getX(pointerIndex), event.getY(pointerIndex));</span><br><span class="line">					<span class="comment">// 更新图片区域</span></span><br><span class="line">					mBitmapRectF = <span class="keyword">new</span> RectF(<span class="number">0</span>, <span class="number">0</span>, mBitmap.getWidth(), mBitmap.getHeight());</span><br><span class="line">					mBitmapMatrix.mapRect(mBitmapRectF);</span><br><span class="line">					invalidate();</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">		canvas.drawBitmap(mBitmap, mBitmapMatrix, mDeafultPaint);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  注意MotionEvent.ACTION_POINTER_DOWN和MotionEvent.ACTION_POINTER_UP事件：在新的一根手指落下来的时候，将这根新的手指作为活动手指，记录它的pointerId并且更新lastPoint的坐标；在其中一根手指抬起的时候进行判断，如果抬起的是非活动手指，那就不要管，如果抬起的时候活动手指，那就把其他的手指作为活动手指。选择新的活动手指的时候，我这里简单粗暴的用了final int newPointerIndex = actionIndex == 0 ? 1 : 0这样的形式，因为我暂时想不到更好的方法了，如果你有，请告诉我。效果如下：<br><img src="http://wx4.sinaimg.cn/mw690/96a29af5gy1fjiuvgx0vtg20go0tn1l8.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/500" width="50%"><br>  多点触控了解的差不多了，接下来我就对那个只支持单点触控的弹性ScrollView进行改进了，但是因为这里涉及到了一些其他的知识，就不贴代码了，但对于多点触控的处理还是核心的那几步。其实写代码都是那样，关键在于理解，理解了之后便能够灵活运用，万变不离其宗。这里只贴出一个改进后的控件的效果：<br><img src="http://upload-images.jianshu.io/upload_images/1626396-df85268d2ebb46ba.gif?imageMogr2/auto-orient/strip" width="50%"></p>
+<hr>
+<h2 id="github地址"><a href="#github地址" class="headerlink" title="github地址"></a>github地址</h2><p>  最后是国际惯例，给出demo的github地址<a href="https://github.com/mundane799699/MutiTouchDemo" target="_blank" rel="noopener">MutiTouchDemo</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/09/simple-imageloader/" rel="prev" title="自己动手实现系列之图片加载框架">
+                自己动手实现系列之图片加载框架 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg"
+                alt="mundane" />
+            
+              <p class="site-author-name" itemprop="name">mundane</p>
+              <p class="site-description motion-element" itemprop="description">心之焚焰</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/mundane799699" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/qimingxingzaiqian" target="_blank" title="新浪微博">
+                    
+                      <i class="fa fa-fw fa-weibo"></i>新浪微博</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#事故现场"><span class="nav-number">1.</span> <span class="nav-text">事故现场</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#预备知识"><span class="nav-number">2.</span> <span class="nav-text">预备知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何使用多点触控"><span class="nav-number">3.</span> <span class="nav-text">如何使用多点触控</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#github地址"><span class="nav-number">4.</span> <span class="nav-text">github地址</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mundane</span>
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
