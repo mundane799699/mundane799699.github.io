@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.jpg?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.jpg?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="面试," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本来不想写这篇的. 在面试中虽然不想笔试或者回答一些记忆性的知识, 却总是被这些东西难倒, 因为记性不好. 所以写下这篇, 以后多看看, 加深记忆. Activity相关生命周期相关ServiceBroadcastReceiverContentProviderFragmentFragment懒加载View相关View的绘制流程View的测量事件分发滑动冲突多进程相关AIDLMessenger动画相">
+<meta name="keywords" content="面试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="interview_prepare">
+<meta property="og:url" content="http://yoursite.com/2018/03/05/interview-prepare/index.html">
+<meta property="og:site_name" content="mundane的幻想空间">
+<meta property="og:description" content="本来不想写这篇的. 在面试中虽然不想笔试或者回答一些记忆性的知识, 却总是被这些东西难倒, 因为记性不好. 所以写下这篇, 以后多看看, 加深记忆. Activity相关生命周期相关ServiceBroadcastReceiverContentProviderFragmentFragment懒加载View相关View的绘制流程View的测量事件分发滑动冲突多进程相关AIDLMessenger动画相">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-05T08:50:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="interview_prepare">
+<meta name="twitter:description" content="本来不想写这篇的. 在面试中虽然不想笔试或者回答一些记忆性的知识, 却总是被这些东西难倒, 因为记性不好. 所以写下这篇, 以后多看看, 加深记忆. Activity相关生命周期相关ServiceBroadcastReceiverContentProviderFragmentFragment懒加载View相关View的绘制流程View的测量事件分发滑动冲突多进程相关AIDLMessenger动画相">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/05/interview-prepare/"/>
+
+
+
+
+
+  <title>interview_prepare | mundane的幻想空间</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mundane的幻想空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生如逆旅, 一苇以航</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/05/interview-prepare/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mundane">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mundane的幻想空间">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">interview_prepare</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T13:42:28+08:00">
+                2018-03-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本来不想写这篇的. 在面试中虽然不想笔试或者回答一些记忆性的知识, 却总是被这些东西难倒, 因为记性不好. 所以写下这篇, 以后多看看, 加深记忆.</p>
+<h1 id="Activity相关"><a href="#Activity相关" class="headerlink" title="Activity相关"></a>Activity相关</h1><h2 id="生命周期相关"><a href="#生命周期相关" class="headerlink" title="生命周期相关"></a>生命周期相关</h2><h1 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h1><h1 id="BroadcastReceiver"><a href="#BroadcastReceiver" class="headerlink" title="BroadcastReceiver"></a>BroadcastReceiver</h1><h1 id="ContentProvider"><a href="#ContentProvider" class="headerlink" title="ContentProvider"></a>ContentProvider</h1><h1 id="Fragment"><a href="#Fragment" class="headerlink" title="Fragment"></a>Fragment</h1><h2 id="Fragment懒加载"><a href="#Fragment懒加载" class="headerlink" title="Fragment懒加载"></a>Fragment懒加载</h2><h1 id="View相关"><a href="#View相关" class="headerlink" title="View相关"></a>View相关</h1><h2 id="View的绘制流程"><a href="#View的绘制流程" class="headerlink" title="View的绘制流程"></a>View的绘制流程</h2><h2 id="View的测量"><a href="#View的测量" class="headerlink" title="View的测量"></a>View的测量</h2><h2 id="事件分发"><a href="#事件分发" class="headerlink" title="事件分发"></a>事件分发</h2><h2 id="滑动冲突"><a href="#滑动冲突" class="headerlink" title="滑动冲突"></a>滑动冲突</h2><h1 id="多进程相关"><a href="#多进程相关" class="headerlink" title="多进程相关"></a>多进程相关</h1><h2 id="AIDL"><a href="#AIDL" class="headerlink" title="AIDL"></a>AIDL</h2><h2 id="Messenger"><a href="#Messenger" class="headerlink" title="Messenger"></a>Messenger</h2><h1 id="动画相关"><a href="#动画相关" class="headerlink" title="动画相关"></a>动画相关</h1><h1 id="Window"><a href="#Window" class="headerlink" title="Window"></a>Window</h1><h1 id="Handler消息机制"><a href="#Handler消息机制" class="headerlink" title="Handler消息机制"></a>Handler消息机制</h1><h1 id="Java基础"><a href="#Java基础" class="headerlink" title="Java基础"></a>Java基础</h1><h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><h2 id="APT与AOP"><a href="#APT与AOP" class="headerlink" title="APT与AOP"></a>APT与AOP</h2><h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h2><h1 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h1><h2 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h2><h2 id="装饰者模式"><a href="#装饰者模式" class="headerlink" title="装饰者模式"></a>装饰者模式</h2><h2 id="builder模式"><a href="#builder模式" class="headerlink" title="builder模式"></a>builder模式</h2><h2 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h2><h1 id="ListView和RecyclerView"><a href="#ListView和RecyclerView" class="headerlink" title="ListView和RecyclerView"></a>ListView和RecyclerView</h1><h1 id="TCP-IP"><a href="#TCP-IP" class="headerlink" title="TCP/IP"></a>TCP/IP</h1><h1 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h1><h2 id="内存优化"><a href="#内存优化" class="headerlink" title="内存优化"></a>内存优化</h2><h2 id="布局优化"><a href="#布局优化" class="headerlink" title="布局优化"></a>布局优化</h2><h2 id="Bitmap优化"><a href="#Bitmap优化" class="headerlink" title="Bitmap优化"></a>Bitmap优化</h2><h1 id="屏幕适配"><a href="#屏幕适配" class="headerlink" title="屏幕适配"></a>屏幕适配</h1><h1 id="主流框架"><a href="#主流框架" class="headerlink" title="主流框架"></a>主流框架</h1><h2 id="okhttp"><a href="#okhttp" class="headerlink" title="okhttp"></a>okhttp</h2><h2 id="retrofit"><a href="#retrofit" class="headerlink" title="retrofit"></a>retrofit</h2><h2 id="rxjava"><a href="#rxjava" class="headerlink" title="rxjava"></a>rxjava</h2><h2 id="eventbus"><a href="#eventbus" class="headerlink" title="eventbus"></a>eventbus</h2><h2 id="ImageLoader"><a href="#ImageLoader" class="headerlink" title="ImageLoader"></a>ImageLoader</h2><h3 id="LruCache"><a href="#LruCache" class="headerlink" title="LruCache"></a>LruCache</h3><h3 id="DiskLruCache"><a href="#DiskLruCache" class="headerlink" title="DiskLruCache"></a>DiskLruCache</h3><h2 id="butterknife"><a href="#butterknife" class="headerlink" title="butterknife"></a>butterknife</h2><h1 id="插件化与热修复"><a href="#插件化与热修复" class="headerlink" title="插件化与热修复"></a>插件化与热修复</h1><h2 id="Tinker"><a href="#Tinker" class="headerlink" title="Tinker"></a>Tinker</h2><h1 id="组件化"><a href="#组件化" class="headerlink" title="组件化"></a>组件化</h1><h1 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h1><h2 id="mvp"><a href="#mvp" class="headerlink" title="mvp"></a>mvp</h2><p><a href="https://www.jianshu.com/p/ed2aa9546c2c" target="_blank" rel="noopener">Android 应用中 MVP 最佳实践</a><br><a href="https://juejin.im/post/5a9654f86fb9a0634a39450e" target="_blank" rel="noopener">从google todo-mvp示例再次学习MVP</a></p>
+<h2 id="mvvm"><a href="#mvvm" class="headerlink" title="mvvm"></a>mvvm</h2><h2 id="mvc"><a href="#mvc" class="headerlink" title="mvc"></a>mvc</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/面试/" rel="tag"><i class="fa fa-tag"></i> 面试</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/02/okhttp-analysis/" rel="next" title="okhttp源码解析">
+                <i class="fa fa-chevron-left"></i> okhttp源码解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg"
+                alt="mundane" />
+            
+              <p class="site-author-name" itemprop="name">mundane</p>
+              <p class="site-description motion-element" itemprop="description">心之焚焰</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/mundane799699" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/qimingxingzaiqian" target="_blank" title="新浪微博">
+                    
+                      <i class="fa fa-fw fa-weibo"></i>新浪微博</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Activity相关"><span class="nav-number">1.</span> <span class="nav-text">Activity相关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#生命周期相关"><span class="nav-number">1.1.</span> <span class="nav-text">生命周期相关</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Service"><span class="nav-number">2.</span> <span class="nav-text">Service</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#BroadcastReceiver"><span class="nav-number">3.</span> <span class="nav-text">BroadcastReceiver</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ContentProvider"><span class="nav-number">4.</span> <span class="nav-text">ContentProvider</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fragment"><span class="nav-number">5.</span> <span class="nav-text">Fragment</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Fragment懒加载"><span class="nav-number">5.1.</span> <span class="nav-text">Fragment懒加载</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#View相关"><span class="nav-number">6.</span> <span class="nav-text">View相关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#View的绘制流程"><span class="nav-number">6.1.</span> <span class="nav-text">View的绘制流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#View的测量"><span class="nav-number">6.2.</span> <span class="nav-text">View的测量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事件分发"><span class="nav-number">6.3.</span> <span class="nav-text">事件分发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#滑动冲突"><span class="nav-number">6.4.</span> <span class="nav-text">滑动冲突</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多进程相关"><span class="nav-number">7.</span> <span class="nav-text">多进程相关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AIDL"><span class="nav-number">7.1.</span> <span class="nav-text">AIDL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Messenger"><span class="nav-number">7.2.</span> <span class="nav-text">Messenger</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#动画相关"><span class="nav-number">8.</span> <span class="nav-text">动画相关</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Window"><span class="nav-number">9.</span> <span class="nav-text">Window</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Handler消息机制"><span class="nav-number">10.</span> <span class="nav-text">Handler消息机制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java基础"><span class="nav-number">11.</span> <span class="nav-text">Java基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#注解"><span class="nav-number">11.1.</span> <span class="nav-text">注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反射"><span class="nav-number">11.2.</span> <span class="nav-text">反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#APT与AOP"><span class="nav-number">11.3.</span> <span class="nav-text">APT与AOP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型"><span class="nav-number">11.4.</span> <span class="nav-text">泛型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设计模式"><span class="nav-number">12.</span> <span class="nav-text">设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单例模式"><span class="nav-number">12.1.</span> <span class="nav-text">单例模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#装饰者模式"><span class="nav-number">12.2.</span> <span class="nav-text">装饰者模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#builder模式"><span class="nav-number">12.3.</span> <span class="nav-text">builder模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工厂模式"><span class="nav-number">12.4.</span> <span class="nav-text">工厂模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ListView和RecyclerView"><span class="nav-number">13.</span> <span class="nav-text">ListView和RecyclerView</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-IP"><span class="nav-number">14.</span> <span class="nav-text">TCP/IP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#性能优化"><span class="nav-number">15.</span> <span class="nav-text">性能优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#内存优化"><span class="nav-number">15.1.</span> <span class="nav-text">内存优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#布局优化"><span class="nav-number">15.2.</span> <span class="nav-text">布局优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bitmap优化"><span class="nav-number">15.3.</span> <span class="nav-text">Bitmap优化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#屏幕适配"><span class="nav-number">16.</span> <span class="nav-text">屏幕适配</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主流框架"><span class="nav-number">17.</span> <span class="nav-text">主流框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#okhttp"><span class="nav-number">17.1.</span> <span class="nav-text">okhttp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#retrofit"><span class="nav-number">17.2.</span> <span class="nav-text">retrofit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rxjava"><span class="nav-number">17.3.</span> <span class="nav-text">rxjava</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#eventbus"><span class="nav-number">17.4.</span> <span class="nav-text">eventbus</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ImageLoader"><span class="nav-number">17.5.</span> <span class="nav-text">ImageLoader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LruCache"><span class="nav-number">17.5.1.</span> <span class="nav-text">LruCache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DiskLruCache"><span class="nav-number">17.5.2.</span> <span class="nav-text">DiskLruCache</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#butterknife"><span class="nav-number">17.6.</span> <span class="nav-text">butterknife</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#插件化与热修复"><span class="nav-number">18.</span> <span class="nav-text">插件化与热修复</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Tinker"><span class="nav-number">18.1.</span> <span class="nav-text">Tinker</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#组件化"><span class="nav-number">19.</span> <span class="nav-text">组件化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#架构"><span class="nav-number">20.</span> <span class="nav-text">架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mvp"><span class="nav-number">20.1.</span> <span class="nav-text">mvp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mvvm"><span class="nav-number">20.2.</span> <span class="nav-text">mvvm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mvc"><span class="nav-number">20.3.</span> <span class="nav-text">mvc</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mundane</span>
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
