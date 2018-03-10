@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.jpg?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.jpg?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="设计模式," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="参考:  经典 Builder / 变种 Builder 模式及自动化生成代码插件">
+<meta name="keywords" content="设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BuilderDesignPattern">
+<meta property="og:url" content="http://yoursite.com/2018/03/10/BuilderDesignPattern/index.html">
+<meta property="og:site_name" content="mundane的幻想空间">
+<meta property="og:description" content="参考:  经典 Builder / 变种 Builder 模式及自动化生成代码插件">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/96a29af5gy1fp7r0ps1c6j20rs0fw0xi">
+<meta property="og:image" content="http://wx4.sinaimg.cn/large/96a29af5gy1fp80tjrdfbg20go0tn7gm.gif">
+<meta property="og:updated_time" content="2018-03-10T13:34:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BuilderDesignPattern">
+<meta name="twitter:description" content="参考:  经典 Builder / 变种 Builder 模式及自动化生成代码插件">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/96a29af5gy1fp7r0ps1c6j20rs0fw0xi">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/10/BuilderDesignPattern/"/>
+
+
+
+
+
+  <title>BuilderDesignPattern | mundane的幻想空间</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mundane的幻想空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生如逆旅, 一苇以航</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/10/BuilderDesignPattern/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mundane">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mundane的幻想空间">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">BuilderDesignPattern</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-10T21:32:42+08:00">
+                2018-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>参考:</p>
+<ul>
+<li><a href="https://www.jianshu.com/p/1ddb69f1f67e" target="_blank" rel="noopener">经典 Builder / 变种 Builder 模式及自动化生成代码插件</a><a id="more"></a></li>
+<li><a href="http://blog.csdn.net/u011240877/article/details/53248917" target="_blank" rel="noopener">变种 Builder 模式：优雅的对象构建方式</a></li>
+<li><a href="https://book.douban.com/subject/26644935/" target="_blank" rel="noopener">《Android源码设计模式解析与实战》</a></li>
+<li><a href="https://juejin.im/entry/59a8c997518825243f1b6779" target="_blank" rel="noopener">重学设计模式 – 建造者模式</a></li>
+<li><a href="https://juejin.im/entry/59c315f66fb9a00a4636f404" target="_blank" rel="noopener">王者荣耀之「建造者模式」</a></li>
+<li><a href="https://juejin.im/post/58f630a544d904006c0eedc9" target="_blank" rel="noopener">结合 Android 浅谈 Builder 模式</a></li>
+<li><a href="https://juejin.im/post/5a23bdd36fb9a045272568a6" target="_blank" rel="noopener">人人都会设计模式—建造者模式–Builder</a></li>
+</ul>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>builder模式也叫建造者模式, 也是Android中应用十分广泛的设计模式之一.<br>举个例子, 比如我们经常使用的框架okhttp和retrofit</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">OkHttpClient client = <span class="keyword">new</span> Builder().writeTimeout(<span class="number">10</span>, TimeUnit.SECONDS)</span><br><span class="line">        .readTimeout(<span class="number">10</span>, TimeUnit.SECONDS)</span><br><span class="line">        .connectTimeout(<span class="number">10</span>, TimeUnit.SECONDS)</span><br><span class="line">        .addInterceptor(interceptor)</span><br><span class="line">        .cache(cache)</span><br><span class="line">        .build();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Retrofit retrofit = <span class="keyword">new</span> Retrofit.Builder().baseUrl(BASE_URL)</span><br><span class="line">        .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())</span><br><span class="line">        .client(okhttpClient)</span><br><span class="line">        .build();</span><br></pre></td></tr></table></figure>
+<p>还有Android中AlerDialog</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> AlertDialog.Builder(<span class="keyword">this</span>).setTitle(<span class="string">"这是标题"</span>)</span><br><span class="line">        .setMessage(<span class="string">"这是Message"</span>)</span><br><span class="line">        .setPositiveButton(<span class="string">"确定"</span>, <span class="keyword">new</span> DialogInterface.OnClickListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(DialogInterface dialog, <span class="keyword">int</span> which)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        .setNegativeButton(<span class="string">"取消"</span>, <span class="keyword">new</span> DialogInterface.OnClickListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(DialogInterface dialog, <span class="keyword">int</span> which)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        .create()</span><br><span class="line">        .show();</span><br></pre></td></tr></table></figure>
+<p>所以我们赶快去探究一下这神器的builder模式吧</p>
+<h1 id="Builder模式介绍"><a href="#Builder模式介绍" class="headerlink" title="Builder模式介绍"></a>Builder模式介绍</h1><p>该模式是为了将构建复杂对象的过程和它的部件解耦, 构建过程和部件都可以自由扩展, 降低耦合.举例来说, 如果一个类有很多种构造方法, 或者一个构造方法中需要传入很多的参数, 比如说需要十几个参数, 可想而知这样的构造函数是十分容易出错的.而如果使用set方法来依次传入参数, 又失去了链式调用的优雅性, 代码变得不连续.这个时候使用builder模式就非常适合了.</p>
+<h1 id="Builder模式的UML类图"><a href="#Builder模式的UML类图" class="headerlink" title="Builder模式的UML类图"></a>Builder模式的UML类图</h1><p><img src="https://ws1.sinaimg.cn/large/96a29af5gy1fp7r0ps1c6j20rs0fw0xi"><br>这时候又要再次科普一下UML类图中各种图形的含义了(因为我每次都容易忘记).<br>每个矩形都代表一个类(包括class和interface), 比如中间的那个Builder, 第一层显示它的类名是Builder, 顶端的<code>《abstract》</code>表示这是一个抽象类, 第二层表示它有三个方法, ‘+’表示方法是public的, 三个方法的返回类型都是void.<br>空心三角形 + 实线 表示ConcreteBuilder是继承自Builder的<br>箭头 + 虚线 表示依赖关系, 箭头指向被使用者, 比如这里的意思就是说ConcreteBuilder依赖Product, 因为ConcreteBuilder在组装的时候还是需要一个Product的, 不然它把零件组装到哪里去呢?也就是说ConcreteBuilder持有Product的引用.<br>空心菱形 + 实线(或者箭头线) 表示聚合关系, 汽车对象由轮胎对象聚合而成，但是轮胎对象的生命期并不受汽车对象的左右。当汽车对象销毁时，轮胎对象也可以单独存在.在这里, Director中必定有一个变量能够指向Builder, 表示聚合关系.</p>
+<h1 id="经典的Builder模式"><a href="#经典的Builder模式" class="headerlink" title="经典的Builder模式"></a>经典的Builder模式</h1><h2 id="Product"><a href="#Product" class="headerlink" title="Product"></a>Product</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 计算机抽象类, 即Product角色</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Computer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> String mBoard;</span><br><span class="line">    <span class="keyword">protected</span> String mDisplay;</span><br><span class="line">    <span class="keyword">protected</span> String mOS;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Computer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBoard</span><span class="params">(String board)</span> </span>&#123;</span><br><span class="line">        mBoard = board;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDisplay</span><span class="params">(String display)</span> </span>&#123;</span><br><span class="line">        mDisplay = display;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">setOS</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Computer&#123;"</span></span><br><span class="line">                + <span class="string">"mBoard='"</span></span><br><span class="line">                + mBoard</span><br><span class="line">                + <span class="string">'\''</span></span><br><span class="line">                + <span class="string">", mDisplay='"</span></span><br><span class="line">                + mDisplay</span><br><span class="line">                + <span class="string">'\''</span></span><br><span class="line">                + <span class="string">", mOS='"</span></span><br><span class="line">                + mOS</span><br><span class="line">                + <span class="string">'\''</span></span><br><span class="line">                + <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="具体的Product"><a href="#具体的Product" class="headerlink" title="具体的Product"></a>具体的Product</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 具体的Computer类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Macbook</span> <span class="keyword">extends</span> <span class="title">Computer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Macbook</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setOS</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mOS = <span class="string">"Mac OS X 10.10"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="抽象Builder"><a href="#抽象Builder" class="headerlink" title="抽象Builder"></a>抽象Builder</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 抽象Builder类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Builder</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildBoard</span><span class="params">(String board)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildDisplay</span><span class="params">(String display)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildOS</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> Computer <span class="title">create</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="ConcreteBuilder"><a href="#ConcreteBuilder" class="headerlink" title="ConcreteBuilder"></a>ConcreteBuilder</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 具体的Builder类, MacbookBuilder</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MacbookBuilder</span> <span class="keyword">extends</span> <span class="title">Builder</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Computer mComputer = <span class="keyword">new</span> Macbook();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildBoard</span><span class="params">(String board)</span> </span>&#123;</span><br><span class="line">        mComputer.setBoard(board);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildDisplay</span><span class="params">(String display)</span> </span>&#123;</span><br><span class="line">        mComputer.setDisplay(display);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildOS</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mComputer.setOS();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Computer <span class="title">create</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mComputer;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Director"><a href="#Director" class="headerlink" title="Director"></a>Director</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Director类, 负责构造Computer</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Director</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    Builder mBuilder;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Director</span><span class="params">(Builder builder)</span> </span>&#123;</span><br><span class="line">        mBuilder = builder;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">construct</span><span class="params">(String board, String display)</span> </span>&#123;</span><br><span class="line">        mBuilder.buildBoard(board);</span><br><span class="line">        mBuilder.buildDisplay(display);</span><br><span class="line">        mBuilder.buildOS();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Builder builder = <span class="keyword">new</span> MacbookBuilder();</span><br><span class="line">        Director pcDirector = <span class="keyword">new</span> Director(builder);</span><br><span class="line">        pcDirector.construct(<span class="string">"英特尔主板"</span>, <span class="string">"Retina 显示器"</span>);</span><br><span class="line">        Computer macBook = builder.create();</span><br><span class="line">        System.out.println(<span class="string">"Computer Info: "</span> + macBook.toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Computer Info: Computer&#123;mBoard=<span class="string">'英特尔主板'</span>, mDisplay=<span class="string">'Retina 显示器'</span>, mOS=<span class="string">'Mac OS X 10.10'</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出, 经典的 Builder 模式重点在于抽象出对象创建的步骤，并通过调用不同的具体实现类从而得到不同的结果, 但是在创建过程中依然要传入多个参数, 不是很方便, 所以有了变种的Builder模式</p>
+<h1 id="变种的Builder模式"><a href="#变种的Builder模式" class="headerlink" title="变种的Builder模式"></a>变种的Builder模式</h1><p>目前来说在 Android&amp;Java 开发过程中经典的 Builder 模式使用的较少，一般广泛使用的是他的一个变种.<br>在日常的开发中 <strong>Director</strong> 角色经常会被忽略，这样会相对的减少了构造的步骤而直接使用一个 Builder 来进行对象的组装.<br>这里我要说的就是一种内部Builder并且能够链式调用的变种.<br>我们就直接进入实战, 模仿AlertDialog写一个dialogfragment, 但是比AlertDialog更简单些.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by mundane on 2018/3/10 下午6:03</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EasyDialogFragment</span> <span class="keyword">extends</span> <span class="title">DialogFragment</span> <span class="keyword">implements</span> <span class="title">OnClickListener</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String KEY_TITLE = <span class="string">"key_title"</span>;</span><br><span class="line">    <span class="keyword">private</span> String mTitle;</span><br><span class="line">    <span class="keyword">private</span> TextView mTvTitle;</span><br><span class="line">    <span class="keyword">private</span> View mBtnCancel;</span><br><span class="line">    <span class="keyword">private</span> View mBtnConfirm;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">interface</span> <span class="title">OnClickListener</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onClick</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> OnClickListener mPositiveListener;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> OnClickListener mNegativeListener;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">setPositiveListener</span><span class="params">(OnClickListener onClickListener)</span> </span>&#123;</span><br><span class="line">        mPositiveListener = onClickListener;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">setNegativeListener</span><span class="params">(OnClickListener onClickListener)</span> </span>&#123;</span><br><span class="line">        mNegativeListener = onClickListener;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (v.getId()) &#123;</span><br><span class="line">            <span class="keyword">case</span> R.id.btn_cancel:</span><br><span class="line">                <span class="keyword">if</span> (mNegativeListener != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    mNegativeListener.onClick();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> R.id.btn_confirm:</span><br><span class="line">                <span class="keyword">if</span> (mPositiveListener != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    mPositiveListener.onClick();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        dismiss();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Builder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> String title;</span><br><span class="line">        <span class="keyword">private</span> OnClickListener mPositiveListener;</span><br><span class="line">        <span class="keyword">private</span> OnClickListener mNegativeListener;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Builder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            title = <span class="string">""</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">setTitle</span><span class="params">(String title)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.title = title;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">setPositiveButton</span><span class="params">(OnClickListener onClickListener)</span> </span>&#123;</span><br><span class="line">            mPositiveListener = onClickListener;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">setNegativeButton</span><span class="params">(OnClickListener onClickListener)</span> </span>&#123;</span><br><span class="line">            mNegativeListener = onClickListener;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> DialogFragment <span class="title">build</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            EasyDialogFragment dialogFragment = <span class="keyword">new</span> EasyDialogFragment();</span><br><span class="line">            Bundle bundle = <span class="keyword">new</span> Bundle();</span><br><span class="line">            bundle.putString(KEY_TITLE, title);</span><br><span class="line">            dialogFragment.setArguments(bundle);</span><br><span class="line">            dialogFragment.setPositiveListener(mPositiveListener);</span><br><span class="line">            dialogFragment.setNegativeListener(mNegativeListener);</span><br><span class="line">            <span class="keyword">return</span> dialogFragment;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        Bundle bundle = getArguments();</span><br><span class="line">        mTitle = bundle.getString(KEY_TITLE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Nullable</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> View <span class="title">onCreateView</span><span class="params">(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,</span></span></span><br><span class="line"><span class="function"><span class="params">            @Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);</span><br><span class="line">        <span class="comment">// 圆角背景</span></span><br><span class="line">        getDialog().getWindow().setBackgroundDrawable(<span class="keyword">new</span> ColorDrawable(Color.TRANSPARENT));</span><br><span class="line">        View rootView = inflater.inflate(R.layout.layout_easy_dialogfragment, container, <span class="keyword">false</span>);</span><br><span class="line">        mTvTitle = rootView.findViewById(R.id.tv_title);</span><br><span class="line">        mTvTitle.setText(mTitle);</span><br><span class="line">        mBtnCancel = rootView.findViewById(R.id.btn_cancel);</span><br><span class="line">        mBtnConfirm = rootView.findViewById(R.id.btn_confirm);</span><br><span class="line">        mBtnCancel.setOnClickListener(<span class="keyword">this</span>);</span><br><span class="line">        mBtnConfirm.setOnClickListener(<span class="keyword">this</span>);</span><br><span class="line">        <span class="keyword">return</span> rootView;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在在日常的开发中 Director 角色经常会被忽略，这样会相对的减少了构造的步骤而直接使用一个 Builder 来进行对象的组装，最关键的还是 Builder 通常为链式调用，它的每个 setter 方法都返回自身，也就是代码中的 return this, 这样就可以实现链式调用了。</p>
+<p>使用EasyDialogFragment:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">DialogFragment dialogFragment = <span class="keyword">new</span> Builder().setTitle(<span class="string">"这是标题"</span>)</span><br><span class="line">        .setPositiveButton(<span class="keyword">new</span> EasyDialogFragment.OnClickListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                Toast.makeText(MainActivity.<span class="keyword">this</span>, <span class="string">"确定"</span>, Toast.LENGTH_SHORT).show();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        .setNegativeButton(<span class="keyword">new</span> EasyDialogFragment.OnClickListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                Toast.makeText(MainActivity.<span class="keyword">this</span>, <span class="string">"取消"</span>, Toast.LENGTH_SHORT).show();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        .build();</span><br><span class="line">dialogFragment.show(getSupportFragmentManager(), <span class="string">""</span>);</span><br></pre></td></tr></table></figure>
+<p>效果:<br><img src="http://wx4.sinaimg.cn/large/96a29af5gy1fp80tjrdfbg20go0tn7gm.gif" width="50%"></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>最后总结一下builder模式的优缺点<br>优点:</p>
+<ol>
+<li>良好的封装性, 使用建造者模式可以使客户端不必知道产品内部组成的细节</li>
+<li>建造者独立, 容易扩展</li>
+<li>链式调用使得代码更简洁、易懂<br>缺点:<br>会产生多余的builder对象以及Director对象, 消耗内存</li>
+</ol>
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>最后发现了一个自动生成builder模式的插件 InnerBuilder<br>详细可以看<a href="https://www.jianshu.com/p/1ddb69f1f67e" target="_blank" rel="noopener">这篇</a><br>本文代码地址:<br><a href="https://github.com/mundane799699/AndroidProjects/tree/master/BuildDesignPattern" target="_blank" rel="noopener">https://github.com/mundane799699/AndroidProjects/tree/master/BuildDesignPattern</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/设计模式/" rel="tag"><i class="fa fa-tag"></i> 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/09/lazyload-fragment/" rel="next" title="Fragment懒加载">
+                <i class="fa fa-chevron-left"></i> Fragment懒加载
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg"
+                alt="mundane" />
+            
+              <p class="site-author-name" itemprop="name">mundane</p>
+              <p class="site-description motion-element" itemprop="description">心之焚焰</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/mundane799699" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/qimingxingzaiqian" target="_blank" title="新浪微博">
+                    
+                      <i class="fa fa-fw fa-weibo"></i>新浪微博</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Builder模式介绍"><span class="nav-number">2.</span> <span class="nav-text">Builder模式介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Builder模式的UML类图"><span class="nav-number">3.</span> <span class="nav-text">Builder模式的UML类图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#经典的Builder模式"><span class="nav-number">4.</span> <span class="nav-text">经典的Builder模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Product"><span class="nav-number">4.1.</span> <span class="nav-text">Product</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体的Product"><span class="nav-number">4.2.</span> <span class="nav-text">具体的Product</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#抽象Builder"><span class="nav-number">4.3.</span> <span class="nav-text">抽象Builder</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcreteBuilder"><span class="nav-number">4.4.</span> <span class="nav-text">ConcreteBuilder</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Director"><span class="nav-number">4.5.</span> <span class="nav-text">Director</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试代码"><span class="nav-number">4.6.</span> <span class="nav-text">测试代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#变种的Builder模式"><span class="nav-number">5.</span> <span class="nav-text">变种的Builder模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#最后"><span class="nav-number">7.</span> <span class="nav-text">最后</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mundane</span>
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

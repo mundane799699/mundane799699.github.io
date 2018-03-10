@@ -111,7 +111,7 @@
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/96a29af5gy1fp0qvnmzafj21mu0b6wfs">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/96a29af5gy1fp0r3lvr3zj216c0pe0x4">
 <meta property="og:image" content="https://blog.piasy.com/img/201607/okhttp_full_process.png">
-<meta property="og:updated_time" content="2018-03-04T08:00:25.000Z">
+<meta property="og:updated_time" content="2018-03-10T06:27:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="okhttp源码解析">
 <meta name="twitter:description" content="Read the fuck source code阅读源码吧">
@@ -379,8 +379,7 @@
       
         <blockquote class="blockquote-center"><p><strong>Read the fuck source code<br>阅读源码吧</strong></p>
 </blockquote>
-<a id="more"></a>
-<p>参考:</p>
+<h3 id=""><a href="#" class="headerlink" title=""></a><a id="more"></a></h3><p>参考:</p>
 <ul>
 <li>Piasy: 拆轮子系列：拆 OkHttp<br><a href="https://blog.piasy.com/2016/07/11/Understand-OkHttp/" target="_blank" rel="noopener">https://blog.piasy.com/2016/07/11/Understand-OkHttp/</a></li>
 <li>郭孝星: Android 开源框架源码鉴赏：Okhttp<br><a href="https://juejin.im/post/5a704ed05188255a8817f4c9" target="_blank" rel="noopener">https://juejin.im/post/5a704ed05188255a8817f4c9</a></li>
@@ -627,7 +626,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -698,7 +697,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#准备"><span class="nav-number">1.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用实例"><span class="nav-number">2.</span> <span class="nav-text">使用实例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OkHttpClient"><span class="nav-number">3.</span> <span class="nav-text">OkHttpClient</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Request"><span class="nav-number">4.</span> <span class="nav-text">Request</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Call"><span class="nav-number">5.</span> <span class="nav-text">Call</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RetryAndFollowUpInterceptor"><span class="nav-number">6.</span> <span class="nav-text">RetryAndFollowUpInterceptor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CacheInterceptor"><span class="nav-number">7.</span> <span class="nav-text">CacheInterceptor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ConnectInterceptor"><span class="nav-number">8.</span> <span class="nav-text">ConnectInterceptor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CallServerInterceptor"><span class="nav-number">9.</span> <span class="nav-text">CallServerInterceptor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#异步的网络请求"><span class="nav-number">10.</span> <span class="nav-text">异步的网络请求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dispatcher"><span class="nav-number">11.</span> <span class="nav-text">Dispatcher</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#addNetworkInterceptor和addInterceptor的区别"><span class="nav-number">12.</span> <span class="nav-text">addNetworkInterceptor和addInterceptor的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">13.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#"><span class="nav-number">1.</span> <span class="nav-text"></span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#准备"><span class="nav-number"></span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用实例"><span class="nav-number"></span> <span class="nav-text">使用实例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OkHttpClient"><span class="nav-number"></span> <span class="nav-text">OkHttpClient</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Request"><span class="nav-number"></span> <span class="nav-text">Request</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Call"><span class="nav-number"></span> <span class="nav-text">Call</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RetryAndFollowUpInterceptor"><span class="nav-number"></span> <span class="nav-text">RetryAndFollowUpInterceptor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CacheInterceptor"><span class="nav-number"></span> <span class="nav-text">CacheInterceptor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ConnectInterceptor"><span class="nav-number"></span> <span class="nav-text">ConnectInterceptor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CallServerInterceptor"><span class="nav-number"></span> <span class="nav-text">CallServerInterceptor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#异步的网络请求"><span class="nav-number"></span> <span class="nav-text">异步的网络请求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dispatcher"><span class="nav-number"></span> <span class="nav-text">Dispatcher</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#addNetworkInterceptor和addInterceptor的区别"><span class="nav-number"></span> <span class="nav-text">addNetworkInterceptor和addInterceptor的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number"></span> <span class="nav-text">总结</span></a></div>
             
 
           </div>

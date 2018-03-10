@@ -97,7 +97,7 @@
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/96a29af5gy1fp6isqq7c3j213m0m4q66">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/96a29af5gy1fp6vzggefuj21ek0a8jtv">
 <meta property="og:image" content="http://wx3.sinaimg.cn/large/96a29af5gy1fp6vrldfmjg20f00qoe81.gif">
-<meta property="og:updated_time" content="2018-03-09T13:36:10.000Z">
+<meta property="og:updated_time" content="2018-03-09T13:37:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Fragment懒加载">
 <meta name="twitter:description" content="前言">
@@ -365,7 +365,7 @@
       
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><a id="more"></a>
 <p>记得去年面试的时候, 面了一家小公司, 那个面试官问我, fragment的懒加载做过吗?我说没做过(确实没做过).后来面试快结束了, 又问我, 懒加载没做过是吗?后来可想而知也没收到offer, (ಥ_ಥ)<br>一直对这个问题耿耿于怀, 不就是fragment的懒加载吗, 有那么难?于是这几天看了一下网上的一些方案, 最终觉得还是自己亲手敲一遍好.</p>
-<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>懒加载的原理其实挺简单的, 最主要的就是利用fragment中的<code>setUserVisibleHint(boolean isVisibleToUser)</code>方法中传进来的那个<code>isVisibleToUser</code>这个参数, 这个参数的字面意思是表示当前fragment是否对用户可见<br><img src="https://ws1.sinaimg.cn/large/96a29af5gy1fp6isqq7c3j213m0m4q66"><br>注意fragment还有一个<code>getUserVisibleHint()</code>的方法, 这个方法在我看来其实没什么用, 因为我试过打印这个方法的返回值, 返回为<code>true</code>并不能保证用户切换到了当前fragment, 如图我切到了viewpager中的第一个fragment, 然后打印了fragment中的<code>getUserVisibleHint()</code>方法的返回值<br><img src="https://ws1.sinaimg.cn/large/96a29af5gy1fp6vzggefuj21ek0a8jtv"></p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>懒加载的原理其实挺简单的, 最主要的就是利用fragment中的<code>setUserVisibleHint(boolean isVisibleToUser)</code>方法中传进来的那个<code>isVisibleToUser</code>这个参数, 这个参数的字面意思是表示当前fragment是否对用户可见<br><img src="https://ws1.sinaimg.cn/large/96a29af5gy1fp6isqq7c3j213m0m4q66"><br>注意fragment还有一个<code>getUserVisibleHint()</code>的方法, 这个方法在我看来其实没什么用, 因为我试过打印这个方法的返回值, 返回为<code>true</code>并不能保证用户切换到了当前fragment.<br>我切到了viewpager中的第一个fragment, 然后打印了viewpager中每一个fragment中的<code>getUserVisibleHint()</code>方法的返回值, 如图<br><img src="https://ws1.sinaimg.cn/large/96a29af5gy1fp6vzggefuj21ek0a8jtv"></p>
 <h1 id="重写setUserVisibleHint"><a href="#重写setUserVisibleHint" class="headerlink" title="重写setUserVisibleHint()"></a>重写setUserVisibleHint()</h1><p>首先定义一个基类, BaseLazyFragment<br>重写<code>setUserVisibleHint()</code>这个方法</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUserVisibleHint</span><span class="params">(<span class="keyword">boolean</span> isVisibleToUser)</span> </span>&#123;</span><br><span class="line">    Log.d(TAG, <span class="string">"setUserVisibleHint, isVisibleToUser = "</span> + isVisibleToUser);</span><br><span class="line">    <span class="keyword">super</span>.setUserVisibleHint(isVisibleToUser);</span><br><span class="line">    <span class="comment">// 如果还没有加载过数据 &amp;&amp; 用户切换到了这个fragment</span></span><br><span class="line">    <span class="comment">// 那就开始加载数据</span></span><br><span class="line">    <span class="keyword">if</span> (!mHaveLoadData &amp;&amp; isVisibleToUser) &#123;</span><br><span class="line">        loadDataStart();</span><br><span class="line">        mHaveLoadData = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>用一个布尔变量<code>mHaveLoadData</code>来表示该fragment是否加载过数据. 如果没有加载过数据, 并且<code>isVisibleToUser</code>为<code>true</code>(表示用户切换到了这个fragment), 那就开始加载数据, 然后标记该fragment已经加载过数据</p>
@@ -423,6 +423,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/10/BuilderDesignPattern/" rel="prev" title="BuilderDesignPattern">
+                BuilderDesignPattern <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -503,7 +507,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
