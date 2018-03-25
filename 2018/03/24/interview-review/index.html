@@ -96,7 +96,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://gw.alipayobjects.com/os/skylark/public/files/f7904f2c4731de7e052852b03d3bf8ff">
 <meta property="og:image" content="https://gw.alipayobjects.com/os/skylark/public/files/442d086485797adcbe53ddc4729466e6">
-<meta property="og:updated_time" content="2018-03-24T13:52:27.000Z">
+<meta property="og:updated_time" content="2018-03-25T14:38:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面试问题复盘(持续更新)">
 <meta name="twitter:description" content="这篇专门记录面试中问到的问题, 并对其中回答的不好的或者没回答上来的问题进行复盘">
@@ -392,6 +392,38 @@
 <li>商户对获取的返回结果数据进行处理<br>商户在客户端同步通知接收模块或服务器端异步通知接收模块获取到支付宝返回的结果数据后，可以结合商户自身业务逻辑进行数据处理（如：订单更新、自动充值到会员账号中等）。同步通知结果仅用于结果展示，入库数据需以异步通知为准。</li>
 </ol>
 <p>总结下来就是在我们客户端这边基本是什么都没做的, 签名和验签这些工作都是我们的服务端来做的, 这样更安全.</p>
+<h2 id="请说一下混淆的原理-为什么四大组件不能被混淆-为什么自定义View不能被混淆"><a href="#请说一下混淆的原理-为什么四大组件不能被混淆-为什么自定义View不能被混淆" class="headerlink" title="# 请说一下混淆的原理, 为什么四大组件不能被混淆, 为什么自定义View不能被混淆?"></a># 请说一下混淆的原理, 为什么四大组件不能被混淆, 为什么自定义View不能被混淆?</h2><ol>
+<li>android平台的混淆原理是用”不能直接猜出含义 的通用变量名和函数名a b c等”替换编译后程序包中”具有明显语义信息的变量名和函数名”. 这样，通过逆向工程得到的只是难以理解的代码.<br>如何开启混淆配置?<br>minifyEnabled true // true开启混淆配置, false关闭</li>
+<li>因为四大组件都在AndroidMainfest中进行了注册, 混淆后xml文件中相关的类找不到它们了。类里面的一些方法，变量是可以混淆的。</li>
+<li>同上, 在xml里面配置好的文件的类名不能被混淆</li>
+</ol>
+<p>其他一些不能被混淆的:</p>
+<ul>
+<li>jni方法</li>
+<li>反射用到的类</li>
+<li>gson, fastjson解析的对象类</li>
+<li>webview的js调用的接口方法</li>
+<li>Parcelable，Serializable</li>
+<li>R文件</li>
+<li>泛型、枚举</li>
+</ul>
+<p>参考资料:<br><a href="https://www.zhihu.com/question/33184477" target="_blank" rel="noopener">android混淆出现的问题与思考?</a><br><a href="https://www.jianshu.com/p/7436a1a32891" target="_blank" rel="noopener">Android混淆从入门到精通</a><br><a href="https://www.linuxidc.com/Linux/2012-04/58952.htm" target="_blank" rel="noopener">Android 混淆代码的原理与实施</a><br><a href="https://blog.csdn.net/fulinwsuafcie/article/details/10947341" target="_blank" rel="noopener">代码混淆的实现原理与方法</a></p>
+<h2 id="请说说组件化-请说说组件化中遇到的坑"><a href="#请说说组件化-请说说组件化中遇到的坑" class="headerlink" title="# 请说说组件化, 请说说组件化中遇到的坑"></a># 请说说组件化, 请说说组件化中遇到的坑</h2><ol>
+<li></li>
+<li>我回答了一个当主项目与 module 中有同样资源时，module 却会使用主项目的资源, 然后就被问这是为什么?然后我就回答不上来了<br>参考:<br><a href="https://www.jianshu.com/p/ba127b56811b" target="_blank" rel="noopener">Android主项目和Module中R类的区别</a><br><a href="http://www.wangyuwei.me/2017/06/15/R-java%E3%80%81R2-java%E6%98%AF%E6%97%B6%E5%80%99%E6%87%82%E4%BA%86/" target="_blank" rel="noopener">R.java、R2.java是时候懂了</a></li>
+</ol>
+<h2 id="请说说你们的多渠道打包是怎么打的-有没有想办法用别的方式打包来解决打包效率低的问题"><a href="#请说说你们的多渠道打包是怎么打的-有没有想办法用别的方式打包来解决打包效率低的问题" class="headerlink" title="# 请说说你们的多渠道打包是怎么打的?有没有想办法用别的方式打包来解决打包效率低的问题?"></a># 请说说你们的多渠道打包是怎么打的?有没有想办法用别的方式打包来解决打包效率低的问题?</h2><p>参考:</p>
+<p><a href="https://www.zhihu.com/question/54419228" target="_blank" rel="noopener">有没有快速的安卓分渠道包的工具推荐一下？</a><br><a href="https://www.zhihu.com/question/29477981" target="_blank" rel="noopener">android如何多渠道打包?</a><br><a href="https://blog.csdn.net/qq_23547831/article/details/51569261" target="_blank" rel="noopener">Android产品研发（五）–&gt;多渠道打包</a></p>
+<h2 id="请说说retrofit请求的流程"><a href="#请说说retrofit请求的流程" class="headerlink" title="# 请说说retrofit请求的流程"></a># 请说说retrofit请求的流程</h2><p>其实retrofit的源码我是真的看过, 但是有的关键地方印象不深, 导致没有说出来, 现在来重新梳理一下.</p>
+<ol>
+<li><p>创建retrofit对象, 这里其实没什么好说的, 利用builder模式设置了一堆自定义的配置, 包括baseUrl, okhttpClient, CallAdapterFactory, ConverterFactory等</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Retrofit.Builder builder = <span class="keyword">new</span> Retrofit.Builder().baseUrl(baseUrl)</span><br><span class="line">        .client(client)</span><br><span class="line">        .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))</span><br><span class="line">        .addConverterFactory(GsonConverterFactory.create(gson));</span><br><span class="line">Retrofit retrofit = builder.build();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>调用retrofit.create()方法, 这里是重点</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">create</span><span class="params">(<span class="keyword">final</span> Class&lt;T&gt; service)</span> </span>&#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="keyword">return</span> (T) Proxy.newProxyInstance(service.getClassLoader(), <span class="keyword">new</span> Class&lt;?&gt;[] &#123; service &#125;,</span><br><span class="line">      <span class="keyword">new</span> InvocationHandler() &#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, @Nullable Object[] args)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">          ...</span><br><span class="line">          ServiceMethod&lt;Object, Object&gt; serviceMethod =</span><br><span class="line">              (ServiceMethod&lt;Object, Object&gt;) loadServiceMethod(method);</span><br><span class="line">          OkHttpCall&lt;Object&gt; okHttpCall = <span class="keyword">new</span> OkHttpCall&lt;&gt;(serviceMethod, args);</span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">new</span> ExecutorCallbackCall&lt;&gt;(callbackExecutor, okHttpCall);</span><br><span class="line">        <span class="comment">// return serviceMethod.callAdapter.adapt(okHttpCall);</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>创建一个serviceMethod, 创建serviceMethod的时候会解析这个方法的各种包括方法上的注解, 方法的参数类型, 方法参数的注解, 同时也会创建callAdapter和responseConverter等.接着传入serviceMethod创建一个okhttpCall. 传入这个okhttpCall作为一个委托类对象, 创建一个ExecutorCallbackCall对象并且最终返回.<br>这里使用了代理模式, 调用这个ExecutorCallbackCall对象的enqueue方法其实就是调用okhttpCall的enqueue方法.</p>
 
       
     </div>
@@ -582,7 +614,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#请描述一下支付宝支付完整的请求流程"><span class="nav-number">1.</span> <span class="nav-text"># 请描述一下支付宝支付完整的请求流程</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#请描述一下支付宝支付完整的请求流程"><span class="nav-number">1.</span> <span class="nav-text"># 请描述一下支付宝支付完整的请求流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#请说一下混淆的原理-为什么四大组件不能被混淆-为什么自定义View不能被混淆"><span class="nav-number">2.</span> <span class="nav-text"># 请说一下混淆的原理, 为什么四大组件不能被混淆, 为什么自定义View不能被混淆?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#请说说组件化-请说说组件化中遇到的坑"><span class="nav-number">3.</span> <span class="nav-text"># 请说说组件化, 请说说组件化中遇到的坑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#请说说你们的多渠道打包是怎么打的-有没有想办法用别的方式打包来解决打包效率低的问题"><span class="nav-number">4.</span> <span class="nav-text"># 请说说你们的多渠道打包是怎么打的?有没有想办法用别的方式打包来解决打包效率低的问题?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#请说说retrofit请求的流程"><span class="nav-number">5.</span> <span class="nav-text"># 请说说retrofit请求的流程</span></a></li></ol></div>
             
 
           </div>
