@@ -98,7 +98,7 @@
 <meta property="og:image" content="https://gw.alipayobjects.com/os/skylark/public/files/442d086485797adcbe53ddc4729466e6">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3985563-25731fb5c707f5d3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/416">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/2/3/1615a238f18d53c9?imageslim">
-<meta property="og:updated_time" content="2018-03-30T14:19:32.000Z">
+<meta property="og:updated_time" content="2018-04-06T09:38:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面试问题复盘(持续更新)">
 <meta name="twitter:description" content="这篇专门记录面试中问到的问题, 并对其中回答的不好的或者没回答上来的问题进行复盘">
@@ -451,7 +451,21 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mBridgeWebView.callHandler(<span class="string">"functionInJs"</span>, <span class="string">"这是java发给js的数据"</span>, <span class="keyword">new</span> CallBackFunction() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCallBack</span><span class="params">(String data)</span> </span>&#123;</span><br><span class="line">        Log.i(TAG, <span class="string">"来自js的应答"</span> + data);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>js代码</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">connectWebViewJavascriptBridge(<span class="function"><span class="keyword">function</span>(<span class="params">bridge</span>) </span>&#123;</span><br><span class="line">    bridge.init(<span class="function"><span class="keyword">function</span>(<span class="params">message, responseCallback</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'JS got a message'</span>, message);</span><br><span class="line">        <span class="keyword">var</span> data = &#123;</span><br><span class="line">            <span class="string">'Javascript Responds'</span>: <span class="string">'测试中文!'</span></span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (responseCallback) &#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'JS responding with'</span>, data);</span><br><span class="line">            responseCallback(data);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    bridge.registerHandler(<span class="string">"functionInJs"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data, responseCallback</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">document</span>.getElementById(<span class="string">"content"</span>).innerHTML = (<span class="string">"来自java的数据 = "</span> + data);</span><br><span class="line">        <span class="keyword">if</span> (responseCallback) &#123;</span><br><span class="line">            <span class="keyword">var</span> responseData = <span class="string">"Javascript Says Right back aka!"</span>;</span><br><span class="line">            responseCallback(responseData);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<h2 id="请说说listview和recyclerview的区别"><a href="#请说说listview和recyclerview的区别" class="headerlink" title="# 请说说listview和recyclerview的区别"></a># 请说说listview和recyclerview的区别</h2><h2 id="请先自我介绍一下"><a href="#请先自我介绍一下" class="headerlink" title="# 请先自我介绍一下"></a># 请先自我介绍一下</h2><p>你好, 我叫周方圆, 2015年毕业, 工作的第三年了. 我现在所在的公司叫…, 做的app叫…, 是一款…类型的app. 我在其中负责的主要功能和模块是…<br>其实就是将简历上的东西背一遍.</p>
+<h2 id="请说说listview和recyclerview的区别"><a href="#请说说listview和recyclerview的区别" class="headerlink" title="# 请说说listview和recyclerview的区别"></a># 请说说listview和recyclerview的区别</h2><ul>
+<li>缓存机制对比<br>listview缓存层级是二级缓存, 而recyclerView是四级缓存;listview缓存的是view, recyclerview缓存的是viewholder, 两者获取缓存的流程也不同</li>
+<li>局部刷新<br>recyclerview提供了局部刷新的方法, <code>notifyItemChanged</code>, 避免调用许多无用的<code>bindView</code>方法</li>
+<li>动画效果<br><code>setItemAnimator( )</code>, <code>ItemTouchHelper</code>用于实现 RecyclerView 条目的滑动、删除和拖拽效果</li>
+<li>嵌套滚动机制<br>recyclerview支持嵌套滚动机制而listview不支持</li>
+</ul>
+<p>recyclerView的优缺点:<br>优点:<br>RecyclerView本身它是不关心视图相关的问题的，由于ListView的紧耦合的问题，google的改进就是RecyclerView本身不参与任何视图相关的问题。它不关心如何将子View放在合适的位置，也不关心如何分割这些子View，更不关心每个子View各自的外观。更进一步来说就是RecyclerView它只负责回收和重用的工作，这也是它名字的由来。<br>所有关于布局、绘制和其他相关的问题，也就是跟数据展示相关的所有问题，都被委派给了一些”插件化”的类来处理。这使得RecyclerView的API变得非常灵活。你需要一个新的布局么？接入另一个LayoutManager就可以了！你想要不同的动画么？接入一个新的ItemAnimator就可以了，诸如此类等等。<br>缺点:<br>在RecyclerView中，没有一个onItemClickListener方法。所以目前在适配器中处理这样的事件比较好。</p>
+<p>整体总结它的几点如下：</p>
+<p>Adapter：包装数据集合并且为每个条目创建视图。</p>
+<p>ViewHolder：保存用于显示每个数据条目的子View。</p>
+<p>LayoutManager：将每个条目的视图放置于适当的位置。</p>
+<p>ItemDecoration：在每个条目的视图的周围或上面绘制一些装饰视图。</p>
+<p>ItemAnimator：在条目被添加、移除或者重排序时添加动画效果。</p>
+<p>结论:<br>列表页展示界面，需要支持动画，或者频繁更新，局部刷新，建议使用RecyclerView，更加强大完善，易扩展；其它情况(如微信卡包列表页)两者都OK，但ListView在使用上会更加方便，快捷。</p>
+<h2 id="请先自我介绍一下"><a href="#请先自我介绍一下" class="headerlink" title="# 请先自我介绍一下"></a># 请先自我介绍一下</h2><p>你好, 我叫周方圆, 2015年毕业, 工作的第三年了. 我现在所在的公司叫…, 做的app叫…, 是一款…类型的app. 我在其中负责的主要功能和模块是…<br>其实就是将简历上的东西背一遍.</p>
 <h2 id="请简述handler消息机制的原理"><a href="#请简述handler消息机制的原理" class="headerlink" title="# 请简述handler消息机制的原理"></a># 请简述handler消息机制的原理</h2><ol>
 <li>在主线程中系统默认创建了 Looper, 也就是在ActivityThread的main方法中调用了<code>Looper.prepareMainLooper();</code>  在这个方法中, 给当前线程设置了一个new出来的Looper对象<code>sThreadLocal.set(new Looper(quitAllowed));</code></li>
 <li>Looper在被new出来的时候会创建一个MessageQueue对象</li>
@@ -472,7 +486,25 @@
 </ul>
 <p>结合图来记忆一下原理<br><img src="https://user-gold-cdn.xitu.io/2018/2/3/1615a238f18d53c9?imageslim"></p>
 <p>参考:<br><a href="https://juejin.im/post/5a743c526fb9a063557d7eba#comment" target="_blank" rel="noopener">别再说你不懂线程池——做个优雅的攻城狮</a></p>
-<h2 id="Bitmap加载大图如何优化防止oom"><a href="#Bitmap加载大图如何优化防止oom" class="headerlink" title="# Bitmap加载大图如何优化防止oom?"></a># Bitmap加载大图如何优化防止oom?</h2><h2 id="请简述一下Activity启动的流程"><a href="#请简述一下Activity启动的流程" class="headerlink" title="# 请简述一下Activity启动的流程"></a># 请简述一下Activity启动的流程</h2>
+<h2 id="Bitmap加载大图如何优化防止oom"><a href="#Bitmap加载大图如何优化防止oom" class="headerlink" title="# Bitmap加载大图如何优化防止oom?"></a># Bitmap加载大图如何优化防止oom?</h2><ul>
+<li>加载 Bitmap 的方式  </li>
+</ul>
+<ol>
+<li>decodeFile( 文件系统 )  </li>
+<li>decodeResourece( 资源 )  </li>
+<li>decodeStream( 输入流 )  </li>
+<li>decodeByteArray( 字节数 )  </li>
+</ol>
+<ul>
+<li>高效加载 Bitmap 的流程</li>
+</ul>
+<ol>
+<li>将 BitmapFactory.Options 的 inJustDecodeBounds 参数设为 true, 然后加载图片就可以实现只解析图片的宽高信息，并不会真正的加载图片.</li>
+<li>从 BitmapFactory.Options 中取出图片原始的宽高信息，对应于 outWidth 和 outHeight 参数.</li>
+<li>根据采样率规则并结合目标 view 的大小计算出采样率 inSampleSize（一般取值为 2 的指数）</li>
+<li>将 BitmapFactory.Options 的 inJustDecodeBounds 设置为 false 重新加载图片</li>
+</ol>
+<h2 id="请简述一下Activity启动的流程"><a href="#请简述一下Activity启动的流程" class="headerlink" title="# 请简述一下Activity启动的流程"></a># 请简述一下Activity启动的流程</h2>
       
     </div>
     
