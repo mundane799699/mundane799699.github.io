@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.jpg?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.jpg?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android,Dagger2," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="参考:Dagger2系统学习Dagger2 入门,以初学者角度.dagger 2 详解">
+<meta name="keywords" content="Android,Dagger2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dagger2初探(一)">
+<meta property="og:url" content="http://yoursite.com/2018/05/15/dagger2learning1/index.html">
+<meta property="og:site_name" content="mundane的幻想空间">
+<meta property="og:description" content="参考:Dagger2系统学习Dagger2 入门,以初学者角度.dagger 2 详解">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p8jwibwpo.bkt.clouddn.com/20180511160739.png">
+<meta property="og:image" content="http://p8jwibwpo.bkt.clouddn.com/20180511165126.png">
+<meta property="og:image" content="http://p8jwibwpo.bkt.clouddn.com/20180514151358.png">
+<meta property="og:image" content="http://p8jwibwpo.bkt.clouddn.com/20180514153053.png">
+<meta property="og:image" content="http://p8jwibwpo.bkt.clouddn.com/20180514164403.png">
+<meta property="og:updated_time" content="2018-05-15T03:50:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dagger2初探(一)">
+<meta name="twitter:description" content="参考:Dagger2系统学习Dagger2 入门,以初学者角度.dagger 2 详解">
+<meta name="twitter:image" content="http://p8jwibwpo.bkt.clouddn.com/20180511160739.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/05/15/dagger2learning1/"/>
+
+
+
+
+
+  <title>Dagger2初探(一) | mundane的幻想空间</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mundane的幻想空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生如逆旅, 一苇以航</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/15/dagger2learning1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mundane">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mundane的幻想空间">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Dagger2初探(一)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-15T11:46:17+08:00">
+                2018-05-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>参考:<br><a href="https://xiaozhuanlan.com/dagger" target="_blank" rel="noopener">Dagger2系统学习</a><br><a href="https://www.jianshu.com/p/1d84ba23f4d2" target="_blank" rel="noopener">Dagger2 入门,以初学者角度.</a><br><a href="https://www.jianshu.com/p/269c3f70ec1e" target="_blank" rel="noopener">dagger 2 详解</a><br><a id="more"></a></p>
+<p>在开始之前先扯会儿淡记录一下，最近又换了个公司（上个公司裁人），不过嘛，也不怎么样。所以今年必须要好好加油，努力在限定时间内（最多一年）进入更优秀的公司。说实话，人在全力投入的时候，就算很短的时间，也能有飞快的进步。<br>扯淡结束，谈谈为什么要学习dagger2.因为公司从外包那里买了代码，要我们在它的基础上继续做二次开发。我原以为外包的代码质量会很差，但是当我一打开他们的代码，发现他们的技术选型都是最新的，mvp + retrofit + rxjava2 + dagger2, 着实惊讶了一阵。不过苦恼也来了，就是dagger2是我以前从来没接触过的框架，据说上手难度还不小，有很多人就直接从入门到放弃了。但是对于我来说，有了梦想，还会害怕小小的困难？而且在高质量的别人的代码上继续开发正是我求之不得呢，难道在又老又旧的代码上继续开发更好？</p>
+<h1 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h1><p>dagger2在github上的地址是这个：<br><a href="https://github.com/google/dagger" target="_blank" rel="noopener">https://github.com/google/dagger</a><br>新建一个项目，我们按照地址中的说明添加依赖</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">  compile <span class="string">'com.google.dagger:dagger:2.16'</span></span><br><span class="line">  annotationProcessor <span class="string">'com.google.dagger:dagger-compiler:2.16'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为最新版本是2.16，所以就添加2.16的版本了。<br>看到后面还有一个叫dagger.android的库可以添加，但是我们这里暂时不添加，那个是dagger2专门针对Android的库，在后续的文章中再介绍。</p>
+<h1 id="Inject"><a href="#Inject" class="headerlink" title="@Inject"></a>@Inject</h1><p>先来说@Inject这个注解。<br>首先创建一个User的实体类, 然后在构造方法上添加@Inject注解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> age;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        name = <span class="string">"mundane"</span>;</span><br><span class="line">        age = <span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Activity中依赖了mUser这个成员变量，给mUser添加@Inject注解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    User mUser;</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后创建Component类。<br>创建MainComponent类，专门对应于MainActivity</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MainComponent</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inject</span><span class="params">(MainActivity activity)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后选择菜单build-&gt;Make Project，可以看到在build/generated/source/apt/debug/包名/目录下有一些文件生成<br><img src="http://p8jwibwpo.bkt.clouddn.com/20180511160739.png" width="50%"><br>然后这个DaggerMainComponent就可以为我们所用了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.activity_main);</span><br><span class="line">    DaggerMainComponent.builder().build().inject(<span class="keyword">this</span>);</span><br><span class="line">    mTv = findViewById(R.id.tv);</span><br><span class="line">    Log.d(TAG, <span class="string">"mUser = "</span> + mUser);</span><br><span class="line">    mTv.setText(<span class="string">"mUser = "</span> +  mUser);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">05-11 16:19:54.556 25822-25822/me.mundane.dagger2learning D/MainActivity: mUser = me.mundane.dagger2learning.bean.User@65fb450</span><br></pre></td></tr></table></figure>
+<p>可以看到这个mUser对象已经不再为null了，那么它是什么时候被赋值的呢？答案就在<code>DaggerMainComponent.builder().build().inject(this);</code>这句代码里。</p>
+<p>DaggerMainComponent.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inject</span><span class="params">(MainActivity activity)</span> </span>&#123;</span><br><span class="line">  injectMainActivity(activity);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> MainActivity <span class="title">injectMainActivity</span><span class="params">(MainActivity instance)</span> </span>&#123;</span><br><span class="line">  MainActivity_MembersInjector.injectMUser(instance, <span class="keyword">new</span> User());</span><br><span class="line">  <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>MainActivity_MembersInjector.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">injectMUser</span><span class="params">(MainActivity instance, User mUser)</span> </span>&#123;</span><br><span class="line">  instance.mUser = mUser;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>另外值得注意的一点是，使用@Inject时，不能用private修饰类的成员变量，否则就会报如下的错误，注意红色箭头的地方：“Dagger does not support injection into private fields”<br><img src="http://p8jwibwpo.bkt.clouddn.com/20180511165126.png"></p>
+<h1 id="component的另一种写法"><a href="#component的另一种写法" class="headerlink" title="component的另一种写法"></a>component的另一种写法</h1><p>刚才我们看到component是这样一种写法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MainComponent</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inject</span><span class="params">(MainActivity activity)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但其实也可以这样，我们新建一个MainComponent2的类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MainComponent2</span> </span>&#123;</span><br><span class="line">    <span class="function">User <span class="title">getUser</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后改写MainActivity中注入代码的方式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.activity_main);</span><br><span class="line">    <span class="comment">//DaggerMainComponent.builder().build().inject(this);</span></span><br><span class="line">    mUser = DaggerMainComponent2.builder().build().getUser();</span><br><span class="line">    mTv = findViewById(R.id.tv);</span><br><span class="line">    Log.d(TAG, <span class="string">"mUser = "</span> + mUser);</span><br><span class="line">    mTv.setText(<span class="string">"mUser = "</span> +  mUser);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印的结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">05-11 16:31:59.028 26504-26504/me.mundane.dagger2learning D/MainActivity: mUser = me.mundane.dagger2learning.bean.User@e352b4e</span><br></pre></td></tr></table></figure>
+<p>可以看到User对象也被成功注入了。<br>但是一般来说，我们都使用第一种写法，避免自己一个一个手动赋值。</p>
+<h1 id="Module和-Provides"><a href="#Module和-Provides" class="headerlink" title="@Module和@Provides"></a>@Module和@Provides</h1><p>之前我们能成功注入一个User对象是因为我们在User的构造方法上添加了@Inject的注解，现在我们想注入一个textView对象，很明显我们无法做到在textView的构造方法上添加@Inject的注解（无法修改Android的系统源码），所以就有了@Module和@Provides这一种方式。</p>
+<p>首先新建一个TextViewModule的类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TextViewModule</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Provides</span></span><br><span class="line">    <span class="function">TextView <span class="title">provideTextView</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> TextView(context);</span><br><span class="line">    &#125;</span><br><span class="line">    ... </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>provideTextView方法需要一个Context参数，这个context我们从外部传入，然后添加一个provideContext的方法, TextViewModule的完整代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TextViewModule</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> Context mContext;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TextViewModule</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        mContext = context;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Provides</span></span><br><span class="line">    <span class="function">TextView <span class="title">provideTextView</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> TextView(context);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Provides</span></span><br><span class="line">    <span class="function">Context <span class="title">provideContext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mContext;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接着我们还要修改Compoment和Activity中的代码。</p>
+<p>首先修改MainComponent：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span>(modules = TextViewModule.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MainComponent</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inject</span><span class="params">(MainActivity activity)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后再次Make Project（<strong>记得每次新增或者修改Component或者新增@Inject的对象之后Make Project</strong>）</p>
+<p>然后，修改Activity中的代码，传入一个component的构建过程中传入一个textViewModule对象，完整代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"MainActivity"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    User mUser;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    TextView mTv;</span><br><span class="line">    <span class="keyword">private</span> RelativeLayout mRl;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        mRl = findViewById(R.id.rl);</span><br><span class="line">        DaggerMainComponent.builder().textViewModule(<span class="keyword">new</span> TextViewModule(<span class="keyword">this</span>)).build().inject(<span class="keyword">this</span>);</span><br><span class="line">        Log.d(TAG, <span class="string">"mUser = "</span> + mUser);</span><br><span class="line">        Log.d(TAG, <span class="string">"mTv = "</span> + mTv);</span><br><span class="line">        mTv.setText(<span class="string">"mUser = "</span> +  mUser);</span><br><span class="line">        mRl.addView(mTv);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">05-11 17:36:54.640 30446-30446/me.mundane.dagger2learning D/MainActivity: mTv = android.widget.TextView&#123;5905649 V.ED..... ......ID 0,0-0,0&#125;</span><br></pre></td></tr></table></figure>
+<p>可见这个textView对象已经被成功注入了。<br>由此可见，Dagger2框架调用provideTextView方法获取一个TextView实例时，发现要传一个Context类型的参数，这时候它会查找被@Provides注解并且返回值为Context类型的方法获取一个Context实例传入provideTextView方法，如果找不到，则会查找Inject注解的构造函数，看构造函数是否存在参数。</p>
+<p>现在再来看，我们还可以把TextViewModule简化一下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TextViewModule</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> Context mContext;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TextViewModule</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        mContext = context;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Provides</span></span><br><span class="line">    <span class="function">TextView <span class="title">provideTextView</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> TextView(mContext);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>两种写法都可以。</p>
+<h1 id="Singleton"><a href="#Singleton" class="headerlink" title="@Singleton"></a>@Singleton</h1><p>@Singleton是@Scope中的一种，@Scope表示注入对象的作用域或者说生命周期。@Singleton的字面含义是单例，但是它实际上并没有这么简单。我们还是实际来使用一下看看这个<code>@Singleton</code>的效果吧。<br>新建一个HttpModule类来提供OkhttpClient的实例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpModule</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Singleton</span></span><br><span class="line">    <span class="meta">@Provides</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> OkHttpClient <span class="title">provideSingletonOkhttpClient</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> OkHttpClient.Builder().build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>需要在提供OkhttpClient实例的这个方法上添加<code>@Singleton</code>注解。</p>
+<p>然后新建一个SingletonComponent</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Singleton</span></span><br><span class="line"><span class="meta">@Component</span>(modules = HttpModule.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SingletonComponent</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inject</span><span class="params">(SingletonActivity activity)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>module的provide方法使用了@Singleton或者别的Scope ，那么 component也必须使用@Singleton或者相同的Scope</p>
+<p>然后在Activity中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"SingletonActivity"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    OkHttpClient mOkHttpClient1;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    OkHttpClient mOkHttpClient2;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_singleton);</span><br><span class="line">        DaggerSingletonComponent.create().inject(<span class="keyword">this</span>);</span><br><span class="line">        Log.d(TAG, <span class="string">"mOkHttpClient1 = "</span> + mOkHttpClient1);</span><br><span class="line">        Log.d(TAG, <span class="string">"mOkHttpClient2 = "</span> + mOkHttpClient2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印的结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">05-14 10:03:49.701 29536-29536/me.mundane.dagger2learning D/SingletonActivity: mOkHttpClient1 = okhttp3.OkHttpClient@bc66074</span><br><span class="line">05-14 10:03:49.702 29536-29536/me.mundane.dagger2learning D/SingletonActivity: mOkHttpClient2 = okhttp3.OkHttpClient@bc66074</span><br></pre></td></tr></table></figure>
+<p>可以发现，这两个实例是一样的，这就是@Singleton所表示的单例的意思了。</p>
+<p>但是事情并不是这么简单。<br>现在我们再新建一个页面，叫做SingletonActivity2</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonActivity2</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"SingletonActivity2"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    OkHttpClient mOkHttpClient1;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    OkHttpClient mOkHttpClient2;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_singleton2);</span><br><span class="line">    </span><br><span class="line">        DaggerSingletonComponent2.create().inject(<span class="keyword">this</span>);</span><br><span class="line">    </span><br><span class="line">        Log.d(TAG, <span class="string">"mOkHttpClient1 = "</span> + mOkHttpClient1);</span><br><span class="line">        Log.d(TAG, <span class="string">"mOkHttpClient2 = "</span> + mOkHttpClient2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再新建一个SingletonComponent2，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Singleton</span></span><br><span class="line"><span class="meta">@Component</span>(modules = HttpModule.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SingletonComponent2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inject</span><span class="params">(SingletonActivity2 activity)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>依然是HttpModule提供依赖</p>
+<p>然后我们修改SingltonActivity中的代码，提供一个按钮，点击跳转到SingletonActivity2</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">go2SingletonActivity2</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">    startActivity(<span class="keyword">new</span> Intent(<span class="keyword">this</span>, SingletonActivity2.class));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接着我们看看这两个Activity中的打印结果</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">05-14 10:58:04.956 9029-9029/me.mundane.dagger2learning D/SingletonActivity: mOkHttpClient1 = okhttp3.OkHttpClient@c043299</span><br><span class="line">05-14 10:58:04.957 9029-9029/me.mundane.dagger2learning D/SingletonActivity: mOkHttpClient2 = okhttp3.OkHttpClient@c043299</span><br><span class="line"></span><br><span class="line">05-14 10:58:09.909 9029-9029/me.mundane.dagger2learning D/SingletonActivity2: mOkHttpClient1 = okhttp3.OkHttpClient@990982f</span><br><span class="line">05-14 10:58:09.909 9029-9029/me.mundane.dagger2learning D/SingletonActivity2: mOkHttpClient2 = okhttp3.OkHttpClient@990982f</span><br></pre></td></tr></table></figure>
+<p>可以发现，在同一个页面中，是两个相同的实例，但是在不同的页面中，是不同的实例。</p>
+<p>解释：@Singleton的生命周期依附于Component，不同的Component就算关联了相同的Module，创建的实例也不同。</p>
+<h1 id="自定义-Scope和dependencies"><a href="#自定义-Scope和dependencies" class="headerlink" title="自定义@Scope和dependencies"></a>自定义@Scope和dependencies</h1><p>上面我们说到，在一个项目中，多个页面的okhttpClient不是同一个实例，而如果我们希望提供的OkHttpClient是一个实例，该怎么办呢？</p>
+<p>首先，创建一个Module，提供OkhttpClient</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppModule</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Singleton</span></span><br><span class="line">    <span class="meta">@Provides</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> OkHttpClient <span class="title">provideSingletonOkhttpClient</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> OkHttpClient().newBuilder().build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后创建一个全局的Component</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Singleton</span></span><br><span class="line"><span class="meta">@Component</span>(modules = AppModule.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AppComponent</span> </span>&#123;</span><br><span class="line">    <span class="function">OkHttpClient <span class="title">provideSingletonOkhttpClient</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>module的provide 方法使用了 scope（这里使用了@Singleton），那么component就必须使用同一个注解因此在AppComponent上也加入了@Singleton注解。这里建立全局的目的很明确，就是提供了单例OkHttpClient。</p>
+<p>然后就在其他的Component中引用全局的Component, 这里就需要用到@Component中的dependencies属性了。</p>
+<p>SingletonComponent.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Singleton</span></span><br><span class="line"><span class="meta">@Component</span>(modules = HttpModule.class, dependencies = AppComponent.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SingletonComponent</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inject</span><span class="params">(SingletonActivity activity)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>SingletonComponent2.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Singleton</span></span><br><span class="line"><span class="meta">@Component</span>(modules = HttpModule.class, dependencies = AppComponent.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SingletonComponent2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inject</span><span class="params">(SingletonActivity2 activity)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后我们在HttpModule中不再需要提供创建OkHttpClient实例的 provide 方法了。我们把代码注释掉。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpModule</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//@Singleton</span></span><br><span class="line">    <span class="comment">//@Provides</span></span><br><span class="line">    <span class="comment">//public OkHttpClient provideSingletonOkhttpClient() &#123;</span></span><br><span class="line">    <span class="comment">//    return new OkHttpClient.Builder().build();</span></span><br><span class="line">    <span class="comment">//&#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Make Project一下， 然后发现报错了<br><img src="http://p8jwibwpo.bkt.clouddn.com/20180514151358.png"><br>报错的原因说的是Singleton的组件不能依赖其他的scope的组件。其实这里就涉及到这样一条规律：Singleton的组件不能依赖其他的scope的组件，只能其他scope的组件依赖Singleton的组件。<br>所以我们将SingletonComponent和SingletonComponent2上面的@Singleton注解去掉，再次Make Project, 发现又报错了<br><img src="http://p8jwibwpo.bkt.clouddn.com/20180514153053.png"><br>报错原因说没有Scope注解的的组件不能依赖有Scope注解的组件。好吧，那我们参照一下@Singleton然后自己写一个自定义的Scoped注解吧。<br>首先打开@Singleton这个注解的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Identifies a type that the injector only instantiates once. Not inherited.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> javax.inject.Scope <span class="doctag">@Scope</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Scope</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention</span>(RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Singleton &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>可以发现@Singleton注解也是一个@Scope注解，所以我们自定义一个ActivityScope，表示这个Activity页面中的局部单例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Scope</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention</span>(RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> ActivityScope &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>然后我们修改HttpModule</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpModule</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//@Singleton</span></span><br><span class="line">    <span class="comment">//@Provides</span></span><br><span class="line">    <span class="comment">//public OkHttpClient provideSingletonOkhttpClient() &#123;</span></span><br><span class="line">    <span class="comment">//    return new OkHttpClient.Builder().build();</span></span><br><span class="line">    <span class="comment">//&#125;</span></span><br><span class="line">    </span><br><span class="line">    <span class="meta">@ActivityScope</span></span><br><span class="line">    <span class="meta">@Provides</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Person <span class="title">providePerson</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Person();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Person类是我自己自己定义的一个实体类，很简单的。</p>
+<p>再修改SingletonComponent和SingletonComponent2</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ActivityScope</span></span><br><span class="line"><span class="meta">@Component</span>(modules = HttpModule.class, dependencies = AppComponent.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SingletonComponent</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inject</span><span class="params">(SingletonActivity activity)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ActivityScope</span></span><br><span class="line"><span class="meta">@Component</span>(modules = HttpModule.class, dependencies = AppComponent.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SingletonComponent2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inject</span><span class="params">(SingletonActivity2 activity)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再修改SingletonActivity的代码<br><img src="http://p8jwibwpo.bkt.clouddn.com/20180514164403.png"><br>可以看到DaggerSingletonComponent中多了一个appComponent的方法，需要传入一个AppComponent的实例。SingletonComponent和SingletonComponent2既然依赖AppComponent,肯定需要你传入一个AppComponent实例，而且需要同一个AppComponent的实例，因为之前说过了， 不同的Component就算关联了相同的Module，创建的实例也不同。</p>
+<p>所以我们将这个AppComponent实例的创建放在Application创建的时候，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyApplication</span> <span class="keyword">extends</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> AppComponent mAppComponent;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate();</span><br><span class="line">        mAppComponent = DaggerAppComponent.create();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> AppComponent <span class="title">getAppComponent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mAppComponent;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>抽取一个BaseActivity</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class BaseActivity extends AppCompatActivity &#123;</span><br><span class="line">    </span><br><span class="line">    public AppComponent getAppComponent() &#123;</span><br><span class="line">        MyApplication myApplication = (MyApplication) getApplication();</span><br><span class="line">        return myApplication.getAppComponent();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再修改SingletonActivity, SingletonActivity2的修改也是类似</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonActivity</span> <span class="keyword">extends</span> <span class="title">BaseActivity</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"SingletonActivity"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    OkHttpClient mOkHttpClient1;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    OkHttpClient mOkHttpClient2;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    Person mPerson1;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    Person mPerson2;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_singleton);</span><br><span class="line">        DaggerSingletonComponent.builder().appComponent(getAppComponent()).build().inject(<span class="keyword">this</span>);</span><br><span class="line">        Log.d(TAG, <span class="string">"mOkHttpClient1 = "</span> + mOkHttpClient1);</span><br><span class="line">        Log.d(TAG, <span class="string">"mOkHttpClient2 = "</span> + mOkHttpClient2);</span><br><span class="line">        Log.d(TAG, <span class="string">"mPerson1 = "</span> + mPerson1);</span><br><span class="line">        Log.d(TAG, <span class="string">"mPerson2 = "</span> + mPerson2);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">go2SingletonActivity2</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">        startActivity(<span class="keyword">new</span> Intent(<span class="keyword">this</span>, SingletonActivity2.class));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查看日志打印：<br>SingletonActivity：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">05-14 17:27:33.463 9874-9874/me.mundane.dagger2learning D/SingletonActivity: mOkHttpClient1 = okhttp3.OkHttpClient@829f409</span><br><span class="line">05-14 17:27:33.463 9874-9874/me.mundane.dagger2learning D/SingletonActivity: mOkHttpClient2 = okhttp3.OkHttpClient@829f409</span><br><span class="line">05-14 17:27:33.463 9874-9874/me.mundane.dagger2learning D/SingletonActivity: mPerson1 = me.mundane.dagger2learning.bean.Person@a2dd60e</span><br><span class="line">05-14 17:27:33.463 9874-9874/me.mundane.dagger2learning D/SingletonActivity: mPerson2 = me.mundane.dagger2learning.bean.Person@a2dd60e</span><br></pre></td></tr></table></figure>
+<p>SingletonActivity2：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">05-14 17:27:40.882 9874-9874/me.mundane.dagger2learning D/SingletonActivity2: mOkHttpClient1 = okhttp3.OkHttpClient@829f409</span><br><span class="line">05-14 17:27:40.883 9874-9874/me.mundane.dagger2learning D/SingletonActivity2: mOkHttpClient2 = okhttp3.OkHttpClient@829f409</span><br><span class="line">05-14 17:27:40.883 9874-9874/me.mundane.dagger2learning D/SingletonActivity2: mPerson1 = me.mundane.dagger2learning.bean.Person@6837770</span><br><span class="line">05-14 17:27:40.883 9874-9874/me.mundane.dagger2learning D/SingletonActivity2: mPerson2 = me.mundane.dagger2learning.bean.Person@6837770</span><br></pre></td></tr></table></figure>
+<p>可以发现，4个OkhttpClient实例都是同一个，说明确实是应用内的单例。<br>同一个页面中的Person实例是同一个，但是不同页面中的Person就不是同一个了，实现的是页面内的单例。</p>
+<p>总结起来就是，Scope的生命周期依附于component，不同的component，创建的实例不同。</p>
+<h1 id="SubComponent"><a href="#SubComponent" class="headerlink" title="@SubComponent"></a>@SubComponent</h1><p>@SubComponent如下：<br>首先写一个ChildComponent</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ActivityScope</span></span><br><span class="line"><span class="meta">@Subcomponent</span>(modules = ChildModule.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ChildComponent</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inject</span><span class="params">(SubcomponentActivity activity)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看一下这个ChildModule</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ChildModule</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@ActivityScope</span></span><br><span class="line">    <span class="meta">@Provides</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> OkhttpClientManager <span class="title">provideOkhttpClientManager</span><span class="params">(OkHttpClient okHttpClient)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> OkhttpClientManager(okHttpClient);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到这里要生成OkhttpClientManager的实例需要一个okHttpClient的实例，本应该在ChildMudule里面继续提供创建OkHttpClient实例的方法，但是这里就不一样了，他会主动到“父类”FatherComponent与之关联的OkhttpClientModule里面去找这个实例，那么怎么将父子组件进行关联呢？<br>我们看FatherComponent</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Singleton</span></span><br><span class="line"><span class="meta">@Component</span>(modules = OkhttpClientModule.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">FatherComponent</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 实现了父子组件之间的关联</span></span><br><span class="line">    <span class="function">ChildComponent <span class="title">getChildComponent</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样就完成了父子组件之间的关联。<br>然后再Activity中使用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SubcomponentActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"SubcomponentActivity"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    OkhttpClientManager mOkhttpClientManager;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_subcomponent);</span><br><span class="line">        </span><br><span class="line">        FatherComponent fatherComponent = DaggerFatherComponent.builder().build();</span><br><span class="line">        </span><br><span class="line">        ChildComponent childComponent = fatherComponent.getChildComponent();</span><br><span class="line">        </span><br><span class="line">        childComponent.inject(<span class="keyword">this</span>);</span><br><span class="line">    </span><br><span class="line">        Log.d(TAG, <span class="string">"mOkhttpClientManager = "</span> + mOkhttpClientManager);</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">05-15 10:31:39.408 25998-25998/me.mundane.dagger2learning D/SubcomponentActivity: mOkhttpClientManager = me.mundane.dagger2learning.bean.OkhttpClientManager@66c6981</span><br></pre></td></tr></table></figure>
+<p>可以看到，成功注入了一个OkhttpClientManager对象。<br>简单总结一下@Subcomponent的使用：</p>
+<ol>
+<li>子组件的声明方式为@Subcomponent</li>
+<li>在父组件中要声明一个返回值为子组件的方法</li>
+<li>上面第2条中的方法可以传递参数，当子组件需要什么Module时,就在该方法中添加该类型的参数，但是参数类型必须是子组件关联的modules中的一种，否则会报错</li>
+</ol>
+<p>注意：</p>
+<ol>
+<li>注意:用@Subcomponent注解声明的Component是无法单独使用的,想要获取该Component实例必须经过其父组件</li>
+<li>父亲和孩子Component都具备Scope，但是父亲定义的Scope大于孩子定义的Scope。父亲FatherComponent 定义的Scope是@Singleton，而孩子SubComponent定义的Scope也是@Singleton，这样就会报错。那么修改孩子的Scope的级别，例如修改为自定义的@ActivityScope是可以的。</li>
+</ol>
+<h1 id="demo地址"><a href="#demo地址" class="headerlink" title="demo地址:"></a>demo地址:</h1><p><a href="https://github.com/mundane799699/AndroidProjects/tree/master/Dagger2Learning" target="_blank" rel="noopener">Dagger2Learning</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"><i class="fa fa-tag"></i> Android</a>
+          
+            <a href="/tags/Dagger2/" rel="tag"><i class="fa fa-tag"></i> Dagger2</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/30/eventbus-analysis/" rel="next" title="Eventbus源码浅析">
+                <i class="fa fa-chevron-left"></i> Eventbus源码浅析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg"
+                alt="mundane" />
+            
+              <p class="site-author-name" itemprop="name">mundane</p>
+              <p class="site-description motion-element" itemprop="description">心之焚焰</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/mundane799699" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/qimingxingzaiqian" target="_blank" title="新浪微博">
+                    
+                      <i class="fa fa-fw fa-weibo"></i>新浪微博</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#添加依赖"><span class="nav-number">1.</span> <span class="nav-text">添加依赖</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Inject"><span class="nav-number">2.</span> <span class="nav-text">@Inject</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#component的另一种写法"><span class="nav-number">3.</span> <span class="nav-text">component的另一种写法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Module和-Provides"><span class="nav-number">4.</span> <span class="nav-text">@Module和@Provides</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Singleton"><span class="nav-number">5.</span> <span class="nav-text">@Singleton</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自定义-Scope和dependencies"><span class="nav-number">6.</span> <span class="nav-text">自定义@Scope和dependencies</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SubComponent"><span class="nav-number">7.</span> <span class="nav-text">@SubComponent</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#demo地址"><span class="nav-number">8.</span> <span class="nav-text">demo地址:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mundane</span>
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
