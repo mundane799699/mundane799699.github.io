@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.jpg?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.jpg?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android,jsbridge," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="参考:Android 与 JS 之 JsBridge 使用与源码分析">
+<meta name="keywords" content="Android,jsbridge">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JsBridge源码分析">
+<meta property="og:url" content="http://yoursite.com/2018/08/02/jsbridge-analysis/index.html">
+<meta property="og:site_name" content="mundane的幻想空间">
+<meta property="og:description" content="参考:Android 与 JS 之 JsBridge 使用与源码分析">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p8jwibwpo.bkt.clouddn.com/jsbridge.gif">
+<meta property="og:image" content="http://p8jwibwpo.bkt.clouddn.com/20180802135400.png">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2608779-9a44c64c5a415e1b.png?imageMogr2/auto-orient/">
+<meta property="og:updated_time" content="2018-08-02T12:37:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JsBridge源码分析">
+<meta name="twitter:description" content="参考:Android 与 JS 之 JsBridge 使用与源码分析">
+<meta name="twitter:image" content="http://p8jwibwpo.bkt.clouddn.com/jsbridge.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/02/jsbridge-analysis/"/>
+
+
+
+
+
+  <title>JsBridge源码分析 | mundane的幻想空间</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mundane的幻想空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生如逆旅, 一苇以航</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/02/jsbridge-analysis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mundane">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mundane的幻想空间">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JsBridge源码分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-02T20:31:36+08:00">
+                2018-08-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>参考:<br><a href="https://www.jianshu.com/p/e4f7fb571cc0" target="_blank" rel="noopener">Android 与 JS 之 JsBridge 使用与源码分析</a><br><a id="more"></a><br>今天分析的是大头鬼的<a href="https://github.com/lzyzsd/JsBridge" target="_blank" rel="noopener">https://github.com/lzyzsd/JsBridge</a>, 废话不多说, 先从一个例子开始.</p>
+<h1 id="用法简析"><a href="#用法简析" class="headerlink" title="用法简析"></a>用法简析</h1><p><img src="http://p8jwibwpo.bkt.clouddn.com/jsbridge.gif" width="50%"><br>在h5页面中有一个”调用相机”的按钮, 点击按钮会传递用户的id给原生方法, 同时调起相机拍照.拍照完之后将图片上传到服务器, 这一步网路请求会有校验所以需要用户id这个参数.将图片上传完成之后原生再将服务器返回的图片地址传递给js, h5拿到图片地址之后将图片显示到页面上.当然为了简化, 我这里只是用了一些假的代码来模拟这些操作.java代码如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"WebActivity"</span>;</span><br><span class="line">    <span class="keyword">private</span> BridgeWebView mBridgeWebView;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.web_activity);</span><br><span class="line">        mBridgeWebView = (BridgeWebView) findViewById(R.id.web_view);</span><br><span class="line">        mBridgeWebView.loadUrl(<span class="string">"file:///android_asset/web.html"</span>);</span><br><span class="line">        mBridgeWebView.registerHandler(<span class="string">"takePhoto"</span>, <span class="keyword">new</span> BridgeHandler() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handler</span><span class="params">(String data, CallBackFunction function)</span> </span>&#123;</span><br><span class="line">                Log.i(TAG, <span class="string">"收到js的消息 = "</span> + data);</span><br><span class="line">                String avatarUrl = getAvatarByUserId(data);</span><br><span class="line">                String msg = <span class="string">"用户的applyId是 = "</span> + data;</span><br><span class="line">                Toast.makeText(WebActivity.<span class="keyword">this</span>, msg, Toast.LENGTH_SHORT).show();</span><br><span class="line">                function.onCallBack(avatarUrl);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 假装拍照获取照片, 然后将拍的照片上传到服务器</span></span><br><span class="line">    <span class="comment">// 上传到服务器需要用到用户的userId</span></span><br><span class="line">    <span class="comment">// 然后将服务器返回的用户的头像链接再返回给js, 设置到h5上</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> String <span class="title">getAvatarByUserId</span><span class="params">(String userId)</span> </span>&#123;</span><br><span class="line">        String url = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (TextUtils.equals(<span class="string">"1234"</span>, userId)) &#123;</span><br><span class="line">            url = <span class="string">"http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> url;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>web.html的代码如下:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Content-Type"</span> <span class="attr">content</span>=<span class="string">"text/html;charset=gb2312"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">jsCallJava</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="built_in">window</span>.WebViewJavascriptBridge.callHandler(</span></span><br><span class="line"><span class="javascript">                <span class="string">'takePhoto'</span></span></span><br><span class="line"><span class="undefined">                , 1234</span></span><br><span class="line"><span class="javascript">                , <span class="function"><span class="keyword">function</span> (<span class="params">img_url</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">                    <span class="built_in">document</span>.getElementById(<span class="string">"content"</span>).src = img_url</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            );</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">id</span>=<span class="string">"content"</span> <span class="attr">width</span>=<span class="string">"100"</span> <span class="attr">height</span>=<span class="string">"100"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"调用相机"</span> <span class="attr">onclick</span>=<span class="string">"jsCallJava()"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>注意到html代码中callHandler方法的第一个参数’takePhoto’和java代码中registerHandler中的第一个参数”takePhoto”是一样的.另外, assets文件夹中还有一个”WebViewJavascriptBridge.js”的js文件也是不可或缺的.如果是实际使用这套方案, 应该将这个文件交给前端人员去调用.<br><img src="http://p8jwibwpo.bkt.clouddn.com/20180802135400.png"></p>
+<h1 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h1><p>现在从源码, 一步步分析上面这个过程的代码调用流程.<br>首先从js代码开始, 点击”调用相机”按钮, 会调用jsCallJava()方法.在这个方法里, 调用了WebViewJavascriptBridge的callHandler方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">jsCallJava</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">window</span>.WebViewJavascriptBridge.callHandler(</span><br><span class="line">        <span class="string">'takePhoto'</span></span><br><span class="line">        , <span class="number">1234</span></span><br><span class="line">        , <span class="function"><span class="keyword">function</span> (<span class="params">img_url</span>) </span>&#123;</span><br><span class="line">            <span class="built_in">document</span>.getElementById(<span class="string">"content"</span>).src = img_url</span><br><span class="line">        &#125;</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">callHandler</span>(<span class="params">handlerName, data, responseCallback</span>) </span>&#123;</span><br><span class="line">    _doSend(&#123;</span><br><span class="line">        handlerName: handlerName,</span><br><span class="line">        data: data</span><br><span class="line">    &#125;, responseCallback);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>callHandler方法会调用_doSend方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sendMessage add message, 触发native处理 sendMessage</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_doSend</span>(<span class="params">message, responseCallback</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (responseCallback) &#123;</span><br><span class="line">        <span class="keyword">var</span> callbackId = <span class="string">'cb_'</span> + (uniqueId++) + <span class="string">'_'</span> + <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">        responseCallbacks[callbackId] = responseCallback;</span><br><span class="line">        message.callbackId = callbackId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    sendMessageQueue.push(message);</span><br><span class="line">    <span class="comment">// yy://__QUEUE_MESSAGE__/</span></span><br><span class="line">    messagingIframe.src = CUSTOM_PROTOCOL_SCHEME + <span class="string">'://'</span> + QUEUE_HAS_MESSAGE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先responseCallback是不为空的, 所以会走if里面的语句.首先会生成一个唯一的callbackId(避免重复), 类似<code>cb_1_1533191074448</code>这样的, 然后以callbackId为key, 回调函数为value, 放在responseCallbacks这个对象里, 同时在message这个对象里也存一份.然后再往sendMessageQueue这个数组里push一个message对象.接着会变更messagingIframe元素的的src属性.在这里, messagingIframe是一个iframe元素</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_createQueueReadyIframe</span>(<span class="params">doc</span>) </span>&#123;</span><br><span class="line">    messagingIframe = doc.createElement(<span class="string">'iframe'</span>);</span><br><span class="line">    messagingIframe.style.display = <span class="string">'none'</span>;</span><br><span class="line">    doc.documentElement.appendChild(messagingIframe);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>iframe元素的src属性变更后，java部分触发shouldOverrideUrlLoading 方法, 这部分代码在BridgeWebViewClient里面</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">shouldOverrideUrlLoading</span><span class="params">(WebView view, String url)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        url = URLDecoder.decode(url, <span class="string">"UTF-8"</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (UnsupportedEncodingException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (url.startsWith(BridgeUtil.YY_RETURN_DATA)) &#123; <span class="comment">// 如果是返回数据</span></span><br><span class="line">        webView.handlerReturnData(url);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (url.startsWith(BridgeUtil.YY_OVERRIDE_SCHEMA)) &#123; <span class="comment">//</span></span><br><span class="line">        webView.flushMessageQueue();</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.shouldOverrideUrlLoading(view, url);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里会走第二个if, 调用BridgeWebView的flushMessageQueue()方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 刷新消息队列</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">flushMessageQueue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (Thread.currentThread() == Looper.getMainLooper().getThread()) &#123;</span><br><span class="line">		loadUrl(BridgeUtil.JS_FETCH_QUEUE_FROM_JAVA, <span class="keyword">new</span> CallBackFunction() &#123;</span><br><span class="line"></span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCallBack</span><span class="params">(String data)</span> </span>&#123;</span><br><span class="line">			    ...</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个flushMessageQueue方法里, 如果当前是主线程就调用一个loadUrl方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">loadUrl</span><span class="params">(String jsUrl, CallBackFunction returnCallback)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// jsUrl = "javascript:WebViewJavascriptBridge._fetchQueue();"</span></span><br><span class="line">	<span class="keyword">this</span>.loadUrl(jsUrl);</span><br><span class="line">       <span class="comment">// 添加至 Map&lt;String, CallBackFunction&gt;</span></span><br><span class="line">	String functionName = BridgeUtil.parseFunctionName(jsUrl);</span><br><span class="line">	<span class="comment">// functionName = "_fetchQueue"</span></span><br><span class="line">	responseCallbacks.put(functionName, returnCallback);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个方法里, 首先会调用WebViewJavascriptBridge的_fetchQueue()方法, 然后解析方法名字, 因为这里的方法名字是写死的, 其实就是<strong>_fetchQueue</strong>, <strong>请记住这个名字, 因为后面会用到</strong>.然后将以这个_fetchQueue为key, 回调方法为value, 放到一个map里面.然后我们再去看js那端的方法.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 提供给native调用,该函数作用:获取sendMessageQueue返回给native,由于android不能直接获取返回的内容,所以使用url shouldOverrideUrlLoading 的方式返回内容</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_fetchQueue</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// [&#123;"handlerName":"takePhoto","data":1234,"callbackId":"cb_1_1532853343154"&#125;]</span></span><br><span class="line">    <span class="keyword">var</span> messageQueueString = <span class="built_in">JSON</span>.stringify(sendMessageQueue);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'messageQueueString = '</span> + messageQueueString);</span><br><span class="line">    sendMessageQueue = [];</span><br><span class="line">    <span class="comment">// android can't read directly the return data, so we can reload iframe src to communicate with java</span></span><br><span class="line">    <span class="keyword">var</span> src = CUSTOM_PROTOCOL_SCHEME + <span class="string">'://return/_fetchQueue/'</span> + <span class="built_in">encodeURIComponent</span>(messageQueueString);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'src = '</span> + src);</span><br><span class="line">    <span class="comment">// yy://return/_fetchQueue/%5B%7B%22handlerName%22%3A%22takePhoto%22%2C%22data%22%3A1234%2C%22callbackId%22%3A%22cb_1_1532853343154%22%7D%5D</span></span><br><span class="line">    messagingIframe.src = src;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>sendMessageQueue这个数组我们在_doSend()方法中用到过, 里面push了一个message对象, json格式化之后字符串就是<code>[{&quot;handlerName&quot;:&quot;takePhoto&quot;,&quot;data&quot;:1234,&quot;callbackId&quot;:&quot;cb_2_1532852750705&quot;}]</code>这样的, 然后将sendMessageQueue这个数组置空, 接着再次变更iframe的src属性, 触发java的shouldOverrideUrlLoading方法, 传递的url是类似<code>yy://return/_fetchQueue/%5B%7B%22handlerName%22%3A%22takePhoto%22%2C%22data%22%3A1234%2C%22callbackId%22%3A%22cb_1_1532853343154%22%7D%5D</code>这样的.<br>现在又回到java端的方法了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">shouldOverrideUrlLoading</span><span class="params">(WebView view, String url)</span> </span>&#123;</span><br><span class="line">    Log.d(TAG, <span class="string">"url = "</span> + url);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        url = URLDecoder.decode(url, <span class="string">"UTF-8"</span>);</span><br><span class="line">        Log.d(TAG, <span class="string">"decodedUrl = "</span> + url);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (UnsupportedEncodingException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (url.startsWith(BridgeUtil.YY_RETURN_DATA)) &#123; <span class="comment">// 如果是返回数据</span></span><br><span class="line">        webView.handlerReturnData(url);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (url.startsWith(BridgeUtil.YY_OVERRIDE_SCHEMA)) &#123; <span class="comment">//</span></span><br><span class="line">        webView.flushMessageQueue();</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.shouldOverrideUrlLoading(view, url);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先将url解码, 这里会走第一个if, 调用handlerReturnData(url)方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 获取到CallBackFunction data执行调用并且从数据集移除</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> url</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">handlerReturnData</span><span class="params">(String url)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// _fetchQueue</span></span><br><span class="line">	String functionName = BridgeUtil.getFunctionFromReturnUrl(url);</span><br><span class="line">	CallBackFunction f = responseCallbacks.get(functionName);</span><br><span class="line">	String data = BridgeUtil.getDataFromReturnUrl(url);</span><br><span class="line">	<span class="keyword">if</span> (f != <span class="keyword">null</span>) &#123;</span><br><span class="line">		f.onCallBack(data);</span><br><span class="line">		responseCallbacks.remove(functionName);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这里会在url中解析出方法名和传递的数据, <strong>方法名就是_fetchQueue</strong>.先根据方法名从Map中取出回调方法, 然后给回调方法传递数据, 然后调用回调方法, 完成之后Map中移除这个回调方法.<br>接着我们看这个回调方法中的逻辑, 也就是flushMessageQueue中的回调逻辑</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">flushMessageQueue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (Thread.currentThread() == Looper.getMainLooper().getThread()) &#123;</span><br><span class="line">		loadUrl(BridgeUtil.JS_FETCH_QUEUE_FROM_JAVA, <span class="keyword">new</span> CallBackFunction() &#123;</span><br><span class="line"></span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCallBack</span><span class="params">(String data)</span> </span>&#123;</span><br><span class="line">				<span class="comment">// deserializeMessage 反序列化消息</span></span><br><span class="line">				List&lt;Message&gt; list = <span class="keyword">null</span>;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					list = Message.toArrayList(data);</span><br><span class="line">				&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                       e.printStackTrace();</span><br><span class="line">					<span class="keyword">return</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (list == <span class="keyword">null</span> || list.size() == <span class="number">0</span>) &#123;</span><br><span class="line">					<span class="keyword">return</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; list.size(); i++) &#123;</span><br><span class="line">					Message m = list.get(i);</span><br><span class="line">					String responseId = m.getResponseId();</span><br><span class="line">					<span class="comment">// 是否是response  CallBackFunction</span></span><br><span class="line">					<span class="keyword">if</span> (!TextUtils.isEmpty(responseId)) &#123;</span><br><span class="line">						CallBackFunction function = responseCallbacks.get(responseId);</span><br><span class="line">						String responseData = m.getResponseData();</span><br><span class="line">						function.onCallBack(responseData);</span><br><span class="line">						responseCallbacks.remove(responseId);</span><br><span class="line">					&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">						CallBackFunction responseFunction = <span class="keyword">null</span>;</span><br><span class="line">						<span class="comment">// if had callbackId 如果有回调Id</span></span><br><span class="line">						<span class="keyword">final</span> String callbackId = m.getCallbackId();</span><br><span class="line">						<span class="keyword">if</span> (!TextUtils.isEmpty(callbackId)) &#123;</span><br><span class="line">							responseFunction = <span class="keyword">new</span> CallBackFunction() &#123;</span><br><span class="line">								<span class="meta">@Override</span></span><br><span class="line">								<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCallBack</span><span class="params">(String data)</span> </span>&#123;</span><br><span class="line">									Message responseMsg = <span class="keyword">new</span> Message();</span><br><span class="line">									responseMsg.setResponseId(callbackId);</span><br><span class="line">									responseMsg.setResponseData(data);</span><br><span class="line">									queueMessage(responseMsg);</span><br><span class="line">								&#125;</span><br><span class="line">							&#125;;</span><br><span class="line">						&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">							responseFunction = <span class="keyword">new</span> CallBackFunction() &#123;</span><br><span class="line">								<span class="meta">@Override</span></span><br><span class="line">								<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCallBack</span><span class="params">(String data)</span> </span>&#123;</span><br><span class="line">									<span class="comment">// do nothing</span></span><br><span class="line">								&#125;</span><br><span class="line">							&#125;;</span><br><span class="line">						&#125;</span><br><span class="line">						<span class="comment">// BridgeHandler执行</span></span><br><span class="line">						BridgeHandler handler;</span><br><span class="line">						<span class="keyword">if</span> (!TextUtils.isEmpty(m.getHandlerName())) &#123;</span><br><span class="line">							handler = messageHandlers.get(m.getHandlerName());</span><br><span class="line">						&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">							handler = defaultHandler;</span><br><span class="line">						&#125;</span><br><span class="line">						<span class="keyword">if</span> (handler != <span class="keyword">null</span>)&#123;</span><br><span class="line">							handler.handler(m.getData(), responseFunction);</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先将数据解析成一个Message的list, 数据是类似<code>[{&quot;handlerName&quot;:&quot;takePhoto&quot;,&quot;data&quot;:1234,&quot;callbackId&quot;:&quot;cb_3_1532855579967&quot;}]</code>这样的.<br>这个Message是自定义的类, 有callbackId, responseId, responseData, data, handlerName这几个成员变量.接着遍历这个list中的每一个Message, 因为没有responseId, 并且callbackId不为空, 所以会生成一个CallBackFunction, 这里面的逻辑我们暂时不看.接着会根据Message中的handlerName, 从messageHandlers中获取一个BridgeHandler对象, 这个对象是我们在WebActivity中注册放到messageHandlers这个map里的, 看一下代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">   mBridgeWebView.registerHandler(<span class="string">"takePhoto"</span>, <span class="keyword">new</span> BridgeHandler() &#123;</span><br><span class="line">       <span class="meta">@Override</span></span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handler</span><span class="params">(String data, CallBackFunction function)</span> </span>&#123;</span><br><span class="line">           Log.i(TAG, <span class="string">"收到js的消息 = "</span> + data);</span><br><span class="line">           String avatarUrl = getAvatarByUserId(data);</span><br><span class="line">           String msg = <span class="string">"用户的applyId是 = "</span> + data;</span><br><span class="line">           Toast.makeText(WebActivity.<span class="keyword">this</span>, msg, Toast.LENGTH_SHORT).show();</span><br><span class="line">           function.onCallBack(avatarUrl);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;);</span><br><span class="line">   </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerHandler</span><span class="params">(String handlerName, BridgeHandler handler)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (handler != <span class="keyword">null</span>) &#123;</span><br><span class="line">           <span class="comment">// 添加至 Map&lt;String, BridgeHandler&gt;</span></span><br><span class="line">		messageHandlers.put(handlerName, handler);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>在这里我们就能明白, 为什么java代码中的方法名字和js代码中的方法名字都要取做takePhoto</strong><br>再回过来, 然后我们就调用这个BridgeHandler的handler方法, 传递的参数一个是Message中的data, 另一个是上面的CallBackFunction.<br>接着在handler方法中, 我们先做了一些自定义的操作, 然后调用了CallBackFunction的onCallBack方法, 参数是一张图片的url.<br>看一下这个onCallBack方法中的逻辑</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">responseFunction = <span class="keyword">new</span> CallBackFunction() &#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCallBack</span><span class="params">(String data)</span> </span>&#123;</span><br><span class="line">		Message responseMsg = <span class="keyword">new</span> Message();</span><br><span class="line">		responseMsg.setResponseId(callbackId);</span><br><span class="line">		responseMsg.setResponseData(data);</span><br><span class="line">		queueMessage(responseMsg);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>创建了一个responseMsg, 然后调用了queueMessage()方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">queueMessage</span><span class="params">(Message m)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (startupMessage != <span class="keyword">null</span>) &#123;</span><br><span class="line">		startupMessage.add(m);</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		dispatchMessage(m);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里会走else, 接着看dispatchMessage()方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 分发message 必须在主线程才分发成功</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> m Message</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dispatchMessage</span><span class="params">(Message m)</span> </span>&#123;</span><br><span class="line">       String messageJson = m.toJson();</span><br><span class="line">       <span class="comment">//escape special characters for json string  为json字符串转义特殊字符</span></span><br><span class="line">       messageJson = messageJson.replaceAll(<span class="string">"(\\\\)([^utrn])"</span>, <span class="string">"\\\\\\\\$1$2"</span>);</span><br><span class="line">       messageJson = messageJson.replaceAll(<span class="string">"(?&lt;=[^\\\\])(\")"</span>, <span class="string">"\\\\\""</span>);</span><br><span class="line">	messageJson = messageJson.replaceAll(<span class="string">"(?&lt;=[^\\\\])(\')"</span>, <span class="string">"\\\\\'"</span>);</span><br><span class="line">	<span class="comment">// javascript:WebViewJavascriptBridge._handleMessageFromNative('&#123;\"responseData\":\"http:\\\/\\\/ww3.sinaimg.cn\\\/mw690\\\/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg\",\"responseId\":\"cb_4_1532856634427\"&#125;');</span></span><br><span class="line">       String javascriptCommand = String.format(BridgeUtil.JS_HANDLE_MESSAGE_FROM_JAVA, messageJson);</span><br><span class="line">       <span class="comment">// 必须要找主线程才会将数据传递出去 --- 划重点</span></span><br><span class="line">       <span class="keyword">if</span> (Thread.currentThread() == Looper.getMainLooper().getThread()) &#123;</span><br><span class="line">           <span class="keyword">this</span>.loadUrl(javascriptCommand);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>首先将这个Message转化成json格式的字符串, 去掉一些特殊字符, 然后再主线程调用js方法, 方法是WebViewJavascriptBridge._handleMessageFromNative方法, 然后我们去看一下这个代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 提供给native调用,receiveMessageQueue 在会在页面加载完后赋值为null,所以</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_handleMessageFromNative</span>(<span class="params">messageJSON</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(messageJSON);</span><br><span class="line">    <span class="keyword">if</span> (receiveMessageQueue &amp;&amp; receiveMessageQueue.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        receiveMessageQueue.push(messageJSON);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        _dispatchMessageFromNative(messageJSON);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里receiveMessageQueue是空的, 所以会走else</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 提供给native使用,</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_dispatchMessageFromNative</span>(<span class="params">messageJSON</span>) </span>&#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// &#123;"responseData":"http:\/\/ww3.sinaimg.cn\/mw690\/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg","responseId":"cb_1_1532864396479"&#125;</span></span><br><span class="line">        <span class="keyword">var</span> message = <span class="built_in">JSON</span>.parse(messageJSON);</span><br><span class="line">        <span class="keyword">var</span> responseCallback;</span><br><span class="line">        <span class="comment">// java call finished, now need to call js callback function</span></span><br><span class="line">        <span class="keyword">if</span> (message.responseId) &#123;</span><br><span class="line">            responseCallback = responseCallbacks[message.responseId];</span><br><span class="line">            <span class="keyword">if</span> (!responseCallback) &#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            responseCallback(message.responseData);</span><br><span class="line">            <span class="keyword">delete</span> responseCallbacks[message.responseId];</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 直接发送</span></span><br><span class="line">            <span class="keyword">if</span> (message.callbackId) &#123;</span><br><span class="line">                <span class="keyword">var</span> callbackResponseId = message.callbackId;</span><br><span class="line">                responseCallback = <span class="function"><span class="keyword">function</span>(<span class="params">responseData</span>) </span>&#123;</span><br><span class="line">                    _doSend(&#123;</span><br><span class="line">                        responseId: callbackResponseId,</span><br><span class="line">                        responseData: responseData</span><br><span class="line">                    &#125;);</span><br><span class="line">                &#125;;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">var</span> handler = WebViewJavascriptBridge._messageHandler;</span><br><span class="line">            <span class="keyword">if</span> (message.handlerName) &#123;</span><br><span class="line">                handler = messageHandlers[message.handlerName];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 查找指定handler</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                handler(message.data, responseCallback);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (exception) &#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="built_in">console</span> != <span class="string">'undefined'</span>) &#123;</span><br><span class="line">                    <span class="built_in">console</span>.log(<span class="string">"WebViewJavascriptBridge: WARNING: javascript handler threw."</span>, message, exception);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先这里的messageJSON是类似<code>{&quot;responseData&quot;:&quot;http:\/\/ww3.sinaimg.cn\/mw690\/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg&quot;,&quot;responseId&quot;:&quot;cb_1_1532864396479&quot;}</code>这样的, 所以responseId是有的, 接着根据responseId从responseCallbacks中取出responseCallback, 这个responseCallback是在_doSend()方法中存进去的, 也就是一开始js代码中callHandler方法中传进去的一个方法.将message.responseData传递给这个方法, 执行完之后从responseCallbacks这个对象里删除responseCallback方法.至于responseCallback里的方法具体是什么逻辑就是将图片地址设置到页面上了</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">jsCallJava</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">window</span>.WebViewJavascriptBridge.callHandler(</span><br><span class="line">        <span class="string">'takePhoto'</span></span><br><span class="line">        , <span class="number">1234</span></span><br><span class="line">        , <span class="function"><span class="keyword">function</span> (<span class="params">img_url</span>) </span>&#123;</span><br><span class="line">            <span class="built_in">document</span>.getElementById(<span class="string">"content"</span>).src = img_url</span><br><span class="line">        &#125;</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到这里, js调用java代码的一次完整流程就分析完了, 还是有点绕的.<br>最后盗一张图总结一下<br><img src="https://upload-images.jianshu.io/upload_images/2608779-9a44c64c5a415e1b.png?imageMogr2/auto-orient/"><br>一次流程估计不容易记住, 多看几遍就顺了.</p>
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>最后是我对于这个jsbridge的看法, 首先优点是封装的比较方便, java端和js端的代码写起来都更加方便了.可以改进的地方就是java调用js可以分版本使用loadUrl()或者evaluateJavascript()方法, 然后js调用java我更喜欢在onJsPrompt()中回调.最后一点是js调用java没有办法全局调用, 每个webview都需要注册一个handler, 然后单独在里面写逻辑.不过这一点其实不算什么缺点, 毕竟每个项目的要求都不一样, 不能强求.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"><i class="fa fa-tag"></i> Android</a>
+          
+            <a href="/tags/jsbridge/" rel="tag"><i class="fa fa-tag"></i> jsbridge</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/29/liveOfBirthday/" rel="next" title="2018.06.29生日随笔">
+                <i class="fa fa-chevron-left"></i> 2018.06.29生日随笔
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg"
+                alt="mundane" />
+            
+              <p class="site-author-name" itemprop="name">mundane</p>
+              <p class="site-description motion-element" itemprop="description">心之焚焰</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/mundane799699" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/qimingxingzaiqian" target="_blank" title="新浪微博">
+                    
+                      <i class="fa fa-fw fa-weibo"></i>新浪微博</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#用法简析"><span class="nav-number">1.</span> <span class="nav-text">用法简析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#源码分析"><span class="nav-number">2.</span> <span class="nav-text">源码分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结语"><span class="nav-number">3.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mundane</span>
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
