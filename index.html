@@ -269,6 +269,161 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/08/react-native-note5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mundane">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mundane的幻想空间">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/08/react-native-note5/" itemprop="url">ReactNative学习笔记(五)之ListView</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-08T16:54:35+08:00">
+                2018-09-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>接上一篇<a href="https://mundane799699.github.io/2018/09/08/react-native-note4/" target="_blank" rel="noopener">ReactNative学习笔记(四)之自定义文本组件与Image组件</a>继续学习ReactNative</p>
+<h1 id="ListView"><a href="#ListView" class="headerlink" title="ListView"></a>ListView</h1><p>ListView就是列表视图, 一个用来显示垂直滚动的内容列表.它需要两个东西, dataSource, 就是数据源.和renderRow, 用来显示每一行内容用的模板.<br>首先导入ListView</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;Platform, StyleSheet, Text, View, Image, ImageBackground, ListView&#125; <span class="keyword">from</span> <span class="string">'react-native'</span>;</span><br></pre></td></tr></table></figure>
+<p>然后在App这个类中添加一个constructor方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">Component</span>&lt;<span class="title">Props</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">        <span class="keyword">super</span>(props)</span><br><span class="line">        <span class="keyword">let</span> movies = [</span><br><span class="line">            &#123;<span class="string">'title'</span>: <span class="string">'肖申克的救赎'</span>&#125;,</span><br><span class="line">            &#123;<span class="string">'title'</span>: <span class="string">'这个杀手不太冷'</span>&#125;,</span><br><span class="line">            &#123;<span class="string">'title'</span>: <span class="string">'阿甘正传'</span>&#125;,</span><br><span class="line">            &#123;<span class="string">'title'</span>: <span class="string">'霸王别姬'</span>&#125;,</span><br><span class="line">            &#123;<span class="string">'title'</span>: <span class="string">'美丽人生'</span>&#125;,</span><br><span class="line">            &#123;<span class="string">'title'</span>: <span class="string">'三傻大闹宝莱坞'</span>&#125;,</span><br><span class="line">            &#123;<span class="string">'title'</span>: <span class="string">'触不可及'</span>&#125;,</span><br><span class="line">            &#123;<span class="string">'title'</span>: <span class="string">'时空恋旅人'</span>&#125;,</span><br><span class="line">            &#123;<span class="string">'title'</span>: <span class="string">'我和狗狗的十个约定'</span>&#125;,</span><br><span class="line">        ];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> dataSource = <span class="keyword">new</span> ListView.DataSource(&#123;</span><br><span class="line">            rowHasChanged: <span class="function">(<span class="params">row1, row2</span>) =&gt;</span> row1 !== row2</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.state = &#123;</span><br><span class="line">            movies: dataSource.cloneWithRows(movies)</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>constructor方法里需要先调用super(props)方法. 我们手工添加一些数据.ListView本身有一种很有效的方法去显示列表的数据, 而且我们要确定重新显示列表内容的时候只重新显示修改过的数据, 所以需要一个对比数据的方法, 也就是rowHasChanged方法.<br>再去设置组件初始化的状态, 把这个状态作为ListView的数据源.<br>然后我们再修改App的render方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">Component</span>&lt;<span class="title">Props</span>&gt; </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;View</span><br><span class="line">                style=&#123;styles.container&#125;&gt;</span><br><span class="line">                &lt;ListView</span><br><span class="line">                    dataSource=&#123;<span class="keyword">this</span>.state.movies&#125;</span><br><span class="line">                    renderRow=&#123;</span><br><span class="line">                        movie =&gt; <span class="xml"><span class="tag">&lt;<span class="name">Text</span> <span class="attr">style</span>=<span class="string">&#123;styles.itemText&#125;</span>&gt;</span>&#123;movie.title&#125;<span class="tag">&lt;/<span class="name">Text</span>&gt;</span></span></span><br><span class="line">                    &#125;</span><br><span class="line">                /&gt;</span><br><span class="line">            &lt;<span class="regexp">/View&gt;</span></span><br><span class="line"><span class="regexp">        );</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">``` </span></span><br><span class="line"><span class="regexp"> 运行效果:</span></span><br><span class="line"><span class="regexp"> &lt;img src="http:/</span><span class="regexp">/p8jwibwpo.bkt.clouddn.com/</span><span class="number">20180908171759.</span>png<span class="string">" width="</span><span class="number">50</span>%<span class="string">" /&gt;</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string"># 从网络获取数据并重新整理列表的显示</span></span><br><span class="line"><span class="string">首先需要从网络请求数据, 我们使用的api是这个`https://api.douban.com/v2/movie/top250`, 在App这个类里面写一个fetchData方法</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">``` js</span></span><br><span class="line"><span class="string">    fetchData() &#123;</span></span><br><span class="line"><span class="string">        fetch(REQUEST_URL)</span></span><br><span class="line"><span class="string">            .then(response =&gt; response.json())</span></span><br><span class="line"><span class="string">            .then(responseData =&gt; &#123;</span></span><br><span class="line"><span class="string">                this.setState(&#123;</span></span><br><span class="line"><span class="string">                    movies: this.state.movies.cloneWithRows(responseData.subjects),</span></span><br><span class="line"><span class="string">                    loaded: true</span></span><br><span class="line"><span class="string">                &#125;)</span></span><br><span class="line"><span class="string">            &#125;)</span></span><br><span class="line"><span class="string">            .done();</span></span><br><span class="line"><span class="string">    &#125;</span></span><br></pre></td></tr></table></figure>
+<p>对了, App的构造函数的的state中需要加一个loaded变量, 用来标记数据是否已经加载完成.在fetchData方法中, 先将数据转json, 然后我们使用的数据是subjects这部分数据作为数据源<br><img src="http://p8jwibwpo.bkt.clouddn.com/20180909224837.png"><br>在得到数据之后将state中的loaded属性设置为true.<br>然后我们修改App的render方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">render() &#123;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="keyword">this</span>.state.loaded) &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;View style=&#123;styles.container&#125;&gt;</span><br><span class="line">                &lt;View style=&#123;styles.loading&#125;&gt;</span><br><span class="line">                    &lt;Text&gt;加载中...&lt;<span class="regexp">/Text&gt;</span></span><br><span class="line"><span class="regexp">                &lt;/</span>View&gt;</span><br><span class="line"></span><br><span class="line">            &lt;<span class="regexp">/View&gt;</span></span><br><span class="line"><span class="regexp">        );</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">        &lt;View style=&#123;styles.container&#125;&gt;</span></span><br><span class="line"><span class="regexp">            &lt;ListView</span></span><br><span class="line"><span class="regexp">                dataSource=&#123;this.state.movies&#125;</span></span><br><span class="line"><span class="regexp">                renderRow=&#123;this.renderMovieList&#125;</span></span><br><span class="line"><span class="regexp">            /</span>&gt;</span><br><span class="line">        &lt;<span class="regexp">/View&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>在state为false的时候显示一个加载中的视图, 如果state为true, 那就显示一个ListView, 数据源就是this.state中的movies, 模板就是一个renderMovieList方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">renderMovieList(movie) &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        &lt;View style=&#123;styles.item&#125;&gt;</span><br><span class="line">            &lt;View style=&#123;styles.itemImage&#125;&gt;</span><br><span class="line">                &lt;Image</span><br><span class="line">                    source=&#123;&#123;<span class="attr">uri</span>: movie.images.large&#125;&#125;</span><br><span class="line">                    style=&#123;styles.image&#125;</span><br><span class="line">                /&gt;</span><br><span class="line">            &lt;<span class="regexp">/View&gt;</span></span><br><span class="line"><span class="regexp">            &lt;View style=&#123;styles.itemContent&#125;&gt;</span></span><br><span class="line"><span class="regexp">                &lt;Text style=&#123;styles.itemHeader&#125;&gt;&#123;movie.title&#125;&lt;/</span>Text&gt;</span><br><span class="line">                &lt;Text style=&#123;styles.itemMeta&#125;&gt;</span><br><span class="line">                    &#123;movie.original_title&#125; ( &#123;movie.year&#125; )</span><br><span class="line">                &lt;<span class="regexp">/Text&gt;</span></span><br><span class="line"><span class="regexp">                &lt;Text style=&#123;styles.redText&#125;&gt;</span></span><br><span class="line"><span class="regexp">                    &#123;movie.rating.average&#125;</span></span><br><span class="line"><span class="regexp">                &lt;/</span>Text&gt;</span><br><span class="line"></span><br><span class="line">            &lt;<span class="regexp">/View&gt;</span></span><br><span class="line"><span class="regexp">        &lt;/</span>View&gt;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的样式经过整理了一下, 稍微有些繁琐, 代码如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> styles = StyleSheet.create(&#123;</span><br><span class="line">    redText: &#123;</span><br><span class="line">        color: <span class="string">'#db2828'</span>,</span><br><span class="line">        fontSize: <span class="number">15</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    itemMeta: &#123;</span><br><span class="line">        fontSize: <span class="number">16</span>,</span><br><span class="line">        color: <span class="string">'rgba(0, 0, 0, 0.6)'</span>,</span><br><span class="line">        marginBottom: <span class="number">6</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    itemHeader: &#123;</span><br><span class="line">        fontSize: <span class="number">18</span>,</span><br><span class="line">        fontFamily: <span class="string">'Helvetica Neue'</span>,</span><br><span class="line">        fontWeight: <span class="string">'300'</span>,</span><br><span class="line">        color: <span class="string">'#6435c9'</span>,</span><br><span class="line">        marginBottom: <span class="number">6</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    itemContent: &#123;</span><br><span class="line">        flex: <span class="number">1</span>,  <span class="comment">// todo 这里的flex等于1到底有什么用</span></span><br><span class="line">        marginLeft: <span class="number">13</span>,</span><br><span class="line">        marginTop: <span class="number">6</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    item: &#123;</span><br><span class="line">        flexDirection: <span class="string">'row'</span>,</span><br><span class="line">        borderBottomWidth: <span class="number">1</span>,</span><br><span class="line">        borderColor: <span class="string">'rgba(100, 53, 201, 0.1)'</span>,</span><br><span class="line">        paddingBottom: <span class="number">6</span>,</span><br><span class="line">        marginBottom: <span class="number">6</span>,</span><br><span class="line">        flex: <span class="number">1</span>, <span class="comment">//</span></span><br><span class="line">    &#125;,</span><br><span class="line">    loading: &#123;</span><br><span class="line">        flex: <span class="number">1</span>,  <span class="comment">// todo 这里的flex等于1到底有什么用</span></span><br><span class="line">        justifyContent: <span class="string">'center'</span>,</span><br><span class="line">        alignItems: <span class="string">'center'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>运行效果:<br><img src="http://p8jwibwpo.bkt.clouddn.com/20180909231235.png" width="50%"><br>注意如果把itemContent属性中的flex: 1注释掉, flex属性就会变成默认的stretch<br>效果如下:<br><img src="http://p8jwibwpo.bkt.clouddn.com/20180909231639.png" width="50%"><br>可以看到文字跑到外面去了, 这是因为, stretch是伸展、张开的意思, 如果文字太长就会将容纳文字的容器的宽度撑大, 也就是Android里的包裹内容的意思, 一撑就撑到屏幕外面去了, 而如果限制容器的宽度为剩余空间的宽度, 文字就会在到控件边缘的时候自动换行了, 不会超出控件的宽度.这点需要注意.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/08/react-native-note4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1570,158 +1725,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/18/dagger2learning2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="mundane">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ww3.sinaimg.cn/mw690/96a29af5jw8fdfu43tnvlj20ro0rotab.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="mundane的幻想空间">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/18/dagger2learning2/" itemprop="url">Dagger2初探(二)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-18T09:57:34+08:00">
-                2018-05-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>参考：<br><a href="https://my.oschina.net/zzxzzg/blog/1541916" target="_blank" rel="noopener">Dagger2 使用（二）</a></p>
-<p>接上一篇<a href="https://mundane799699.github.io/2018/05/15/dagger2learning1/" target="_blank" rel="noopener">Dagger2初探(一)</a>继续讲Dagger2中的一些注解。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/18/dagger2learning2/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1771,7 +1779,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
