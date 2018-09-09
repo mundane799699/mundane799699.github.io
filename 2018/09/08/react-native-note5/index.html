@@ -86,21 +86,21 @@
 
 
 
-<meta name="description" content="前言接上一篇ReactNative学习笔记(四)之自定义文本组件与Image组件继续学习ReactNative ListViewListView就是列表视图, 一个用来显示垂直滚动的内容列表.它需要两个东西, dataSource, 就是数据源.和renderRow, 用来显示每一行内容用的模板.首先导入ListView 1import &amp;#123;Platform, StyleSheet, Te">
+<meta name="description" content="前言接上一篇ReactNative学习笔记(四)之自定义文本组件与Image组件继续学习ReactNative">
 <meta name="keywords" content="ReactNative">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ReactNative学习笔记(五)之ListView">
 <meta property="og:url" content="http://yoursite.com/2018/09/08/react-native-note5/index.html">
 <meta property="og:site_name" content="mundane的幻想空间">
-<meta property="og:description" content="前言接上一篇ReactNative学习笔记(四)之自定义文本组件与Image组件继续学习ReactNative ListViewListView就是列表视图, 一个用来显示垂直滚动的内容列表.它需要两个东西, dataSource, 就是数据源.和renderRow, 用来显示每一行内容用的模板.首先导入ListView 1import &amp;#123;Platform, StyleSheet, Te">
+<meta property="og:description" content="前言接上一篇ReactNative学习笔记(四)之自定义文本组件与Image组件继续学习ReactNative">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p8jwibwpo.bkt.clouddn.com/20180909224837.png">
 <meta property="og:image" content="http://p8jwibwpo.bkt.clouddn.com/20180909231235.png">
 <meta property="og:image" content="http://p8jwibwpo.bkt.clouddn.com/20180909231639.png">
-<meta property="og:updated_time" content="2018-09-09T15:22:10.000Z">
+<meta property="og:updated_time" content="2018-09-09T15:24:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ReactNative学习笔记(五)之ListView">
-<meta name="twitter:description" content="前言接上一篇ReactNative学习笔记(四)之自定义文本组件与Image组件继续学习ReactNative ListViewListView就是列表视图, 一个用来显示垂直滚动的内容列表.它需要两个东西, dataSource, 就是数据源.和renderRow, 用来显示每一行内容用的模板.首先导入ListView 1import &amp;#123;Platform, StyleSheet, Te">
+<meta name="twitter:description" content="前言接上一篇ReactNative学习笔记(四)之自定义文本组件与Image组件继续学习ReactNative">
 <meta name="twitter:image" content="http://p8jwibwpo.bkt.clouddn.com/20180909224837.png">
 
 
@@ -363,7 +363,7 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>接上一篇<a href="https://mundane799699.github.io/2018/09/08/react-native-note4/" target="_blank" rel="noopener">ReactNative学习笔记(四)之自定义文本组件与Image组件</a>继续学习ReactNative</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>接上一篇<a href="https://mundane799699.github.io/2018/09/08/react-native-note4/" target="_blank" rel="noopener">ReactNative学习笔记(四)之自定义文本组件与Image组件</a>继续学习ReactNative<br><a id="more"></a></p>
 <h1 id="ListView"><a href="#ListView" class="headerlink" title="ListView"></a>ListView</h1><p>ListView就是列表视图, 一个用来显示垂直滚动的内容列表.它需要两个东西, dataSource, 就是数据源.和renderRow, 用来显示每一行内容用的模板.<br>首先导入ListView</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;Platform, StyleSheet, Text, View, Image, ImageBackground, ListView&#125; <span class="keyword">from</span> <span class="string">'react-native'</span>;</span><br></pre></td></tr></table></figure>
 <p>然后在App这个类中添加一个constructor方法</p>
