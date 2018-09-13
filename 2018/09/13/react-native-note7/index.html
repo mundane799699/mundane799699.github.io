@@ -96,7 +96,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p8jwibwpo.bkt.clouddn.com/20180913204416.png">
 <meta property="og:image" content="http://p8jwibwpo.bkt.clouddn.com/20180913204923.png">
-<meta property="og:updated_time" content="2018-09-13T12:50:07.000Z">
+<meta property="og:updated_time" content="2018-09-13T12:51:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ReactNative学习笔记(七)之重新组织应用的组件">
 <meta name="twitter:description" content="前言接上一篇ReactNative学习笔记(六)之重新组织应用的样式继续学习ReactNative">
@@ -363,7 +363,7 @@
 
       
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>接上一篇<a href="https://mundane799699.github.io/2018/09/12/react-native-note6/" target="_blank" rel="noopener">ReactNative学习笔记(六)之重新组织应用的样式</a>继续学习ReactNative<br><a id="more"></a></p>
-<h1 id="组织应用的组件"><a href="#组织应用的组件" class="headerlink" title="组织应用的组件"></a>组织应用的组件</h1><p>我们之前是把逻辑全都写在了App.js的App这个class中, 其实我们可以把将逻辑全都放在一个组件中, 然后将在render方法中return这个组件<br><img src="http://p8jwibwpo.bkt.clouddn.com/20180913204416.png" width="50%"><br>在如图的目录下新建一个叫做MovieList.js的文件, 然后将App.js的代码全部复制粘贴过来, 然后修修改改一下.<br>首先样式的导入路径要修改一下</p>
+<h1 id="组织应用的组件"><a href="#组织应用的组件" class="headerlink" title="组织应用的组件"></a>组织应用的组件</h1><p>我们之前是把逻辑全都写在了App.js的App这个class中, 其实我们可以把将逻辑全都放在一个组件中, 然后将在render方法中return这个组件<br><img src="http://p8jwibwpo.bkt.clouddn.com/20180913204416.png" width="50%"><br>在如图的目录下新建一个叫做MovieList.js的文件, 然后将App.js的代码全部复制粘贴过来, 修修改改一下.<br>首先样式的导入路径要修改一下</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> styles <span class="keyword">from</span> <span class="string">'../Styles/Main'</span>;</span><br></pre></td></tr></table></figure>
 <p>然后类名改为MovieList</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MovieList</span> <span class="keyword">extends</span> <span class="title">Component</span>&lt;<span class="title">Props</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">        <span class="keyword">super</span>(props)</span><br><span class="line">        <span class="keyword">this</span>.state = &#123;</span><br><span class="line">            movies: <span class="keyword">new</span> ListView.DataSource(&#123;</span><br><span class="line">                rowHasChanged: <span class="function">(<span class="params">row1, row2</span>) =&gt;</span> row1 !== row2</span><br><span class="line">            &#125;),</span><br><span class="line">            loaded: <span class="literal">false</span></span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">this</span>.fetchData();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
